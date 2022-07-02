@@ -20,7 +20,8 @@ void main() {
         routes: {
           //Links a String name to a View (Used for named Routes)
           '/login/': (context) => const LoginView(),
-          '/register/': (context) => const RegisterView()
+          '/register/': (context) => const RegisterView(),
+          '/notes/': (context) => const NotesView()
         }),
   );
 }
