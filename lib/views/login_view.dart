@@ -4,6 +4,8 @@ import 'dart:developer' as devtools show log;
 
 import 'package:mynotes/constants/routes.dart';
 
+import '../utility/show_error_dialog.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -65,14 +67,26 @@ class _LoginViewState extends State<LoginView> {
                   );
                 } on FirebaseAuthException catch (e) {
                   if (e.code == "invalid-email") {
-                    devtools.log("Invalid Email");
+                    await showErrorDialog(
+                      context,
+                      "Invalid Email",
+                    );
                   } else if (e.code == "wrong-password") {
-                    devtools.log("Typed Wrong Password Dickhead");
+                    await showErrorDialog(
+                      context,
+                      "Typed Wrong Password Dickhead",
+                    );
                   } else {
-                    devtools.log(
-                        "Something Other than Invalid Email Error Occured");
-                    devtools.log(e.code);
+                    await showErrorDialog(
+                      context,
+                      "Error: ${e.code}",
+                    );
                   }
+                } catch (e) {
+                  await showErrorDialog(
+                    context,
+                    e.toString(),
+                  );
                 }
               },
               child: const Text("Login")),
