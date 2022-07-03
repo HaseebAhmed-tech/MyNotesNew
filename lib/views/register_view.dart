@@ -87,7 +87,9 @@ class _RegisterViewState extends State<RegisterView> {
               },
               child: const Text("Register")),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   loginRoute,
                   (route) => false,

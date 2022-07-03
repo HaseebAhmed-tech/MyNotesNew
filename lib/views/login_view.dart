@@ -59,7 +59,6 @@ class _LoginViewState extends State<LoginView> {
                     password: password,
                   );
                   final user = FirebaseAuth.instance.currentUser;
-                  print(user);
                   if (user?.emailVerified ?? false) {
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamedAndRemoveUntil(
@@ -67,6 +66,7 @@ class _LoginViewState extends State<LoginView> {
                       (route) => false,
                     );
                   } else {
+                    user?.sendEmailVerification();
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamed(verifyEmailRoute);
                   }
