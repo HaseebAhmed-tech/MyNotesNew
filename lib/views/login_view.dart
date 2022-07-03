@@ -1,9 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:mynotes/constants/routes.dart';
-
 import '../utility/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
@@ -56,15 +53,25 @@ class _LoginViewState extends State<LoginView> {
                 try {
                   final email = _email.text;
                   final password = _password.text;
+
                   await FirebaseAuth.instance.signInWithEmailAndPassword(
                     email: email,
                     password: password,
                   );
+                  final user = FirebaseAuth.instance.currentUser;
+                  print(user);
+                  if (user?.emailVerified ?? false) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      notesRoute,
+                      (route) => false,
+                    );
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushNamed(verifyEmailRoute);
+                  }
                   // ignore: use_build_context_synchronously
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    notesRoute,
-                    (route) => false,
-                  );
+
                 } on FirebaseAuthException catch (e) {
                   if (e.code == "invalid-email") {
                     await showErrorDialog(
@@ -75,6 +82,11 @@ class _LoginViewState extends State<LoginView> {
                     await showErrorDialog(
                       context,
                       "Typed Wrong Password Dickhead",
+                    );
+                  } else if (e.code == "user-not-found") {
+                    await showErrorDialog(
+                      context,
+                      "User Not Found",
                     );
                   } else {
                     await showErrorDialog(

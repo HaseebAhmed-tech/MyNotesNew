@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/utility/show_error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -54,19 +53,36 @@ class _RegisterViewState extends State<RegisterView> {
                 try {
                   final email = _email.text;
                   final password = _password.text;
-                  final userCredential = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                          email: email, password: password);
-                  devtools.log(userCredential.toString());
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: email, password: password);
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification();
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pushNamed(verifyEmailRoute);
                 } on FirebaseAuthException catch (e) {
                   if (e.code == "weak-password") {
-                    devtools.log("Your Password is as weak as your weiner");
+                    showErrorDialog(
+                      context,
+                      "Your Password is as weak as your weiner",
+                    );
                   } else if (e.code == "email-already-in-use") {
-                    devtools
-                        .log("Tatte is email se tu pehle hi reg kr chuka ha");
+                    showErrorDialog(
+                      context,
+                      "This Email is already Registered",
+                    );
                   } else if (e.code == "invalid-email") {
-                    devtools.log("Pen Yakka Email te shi likh le");
+                    showErrorDialog(
+                      context,
+                      "Pen Yakka Email te shi likh le",
+                    );
+                  } else {
+                    showErrorDialog(context, "Error: ${e.code}");
                   }
+                } catch (e) {
+                  await showErrorDialog(
+                    context,
+                    e.toString(),
+                  );
                 }
               },
               child: const Text("Register")),

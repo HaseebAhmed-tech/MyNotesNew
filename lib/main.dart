@@ -22,7 +22,8 @@ void main() {
           //Links a String name to a View (Used for named Routes)
           loginRoute: (context) => const LoginView(),
           registerRoute: (context) => const RegisterView(),
-          notesRoute: (context) => const NotesView()
+          notesRoute: (context) => const NotesView(),
+          verifyEmailRoute: (context) => const VerifyEmailView(),
         }),
   );
 }
@@ -44,11 +45,9 @@ class HomePage extends StatelessWidget {
               if (user.emailVerified) {
                 return const NotesView();
               }
-            } else {
-              return const VerifyEmailView();
             }
 
-            return const Text("Done");
+            return const LoginView();
 
           default:
             return const CircularProgressIndicator();
