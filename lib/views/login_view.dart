@@ -80,7 +80,7 @@ class _LoginViewState extends State<LoginView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         const SizedBox(height: 10),
-                        TextField(
+                        TextFormField(
                           controller: _email,
                           decoration: InputDecoration(
                             fillColor: const Color(0xFF61A4F9),
@@ -186,7 +186,7 @@ class _LoginViewState extends State<LoginView> {
                                         // ignore: use_build_context_synchronously
                                         Navigator.of(context)
                                             .pushNamedAndRemoveUntil(
-                                          notesRoute,
+                                          userProfile,
                                           (route) => false,
                                         );
                                       } else {
