@@ -302,7 +302,13 @@ class _LoginViewState extends State<LoginView> {
                                       ],
                                     ),
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                          ngoProfileRoute,
+                                          (route) => false,
+                                        );
+                                      },
                                       child: const Text(
                                         "NGO",
                                         style: TextStyle(

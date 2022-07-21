@@ -3,13 +3,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/views/NGO/create_opportunity.dart';
 import '../notes_view.dart';
 
 class NgoUserProfile extends StatelessWidget {
   final String _fullName = "Haseeb Ahmed";
   final String _status = "NGO Manager";
-  final String _bio =
-      "\"Patricia's friend who was here hardly had any issues at all, but she wasn't telling the truth. Yesterday, before she left to go home,\"";
   final String _hours_offered = "1000";
   final String _projects_offered = "200";
   final String _volunteer_engaged = "4.1k";
@@ -128,14 +127,7 @@ class NgoUserProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildBio(BuildContext context, String value, String s, Icon I) {
-    // TextStyle _bioText = const TextStyle(
-    //   fontFamily: 'Spectral',
-    //   fontWeight: FontWeight.w500,
-    //   fontStyle: FontStyle.italic,
-    //   color: Color(0xFF799497),
-    //   fontSize: 16.0,
-    // );
+  Widget _buildBio(String value, String s, Icon I) {
     return Container(
       height: 60.0,
       width: 165,
@@ -173,21 +165,6 @@ class NgoUserProfile extends StatelessWidget {
         ),
       ),
     );
-
-    // return Container(
-    //   color: Theme.of(context).scaffoldBackgroundColor,
-    //   padding: const EdgeInsets.only(
-    //     top: 30.0,
-    //     bottom: 10.0,
-    //     left: 10.0,
-    //     right: 10.0,
-    //   ),
-    //   child: Text(
-    //     _bio,
-    //     style: _bioText,
-    //     textAlign: TextAlign.center,
-    //   ),
-    // );
   }
 
   Widget _buildSeparator(Size screenSize) {
@@ -195,13 +172,18 @@ class NgoUserProfile extends StatelessWidget {
       width: screenSize.width / 1.6,
       height: 2.0,
       color: Colors.black54,
-      margin: const EdgeInsets.only(top: 12.0),
+      margin: const EdgeInsets.only(top: 30.0),
     );
   }
 
-  Widget _buildSearchButton(Size screenSize) {
+  Widget _buildSearchButton(Size screenSize, BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          ngoCreateOpportunity,
+          (route) => false,
+        );
+      },
       child: Container(
         width: screenSize.width / 1.4,
         height: 45,
@@ -249,7 +231,7 @@ class NgoUserProfile extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Text(
-                    "EDIT PROFILE",
+                    "STATUS",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -301,23 +283,21 @@ class NgoUserProfile extends StatelessWidget {
   }
 
   Widget _buildShowStatus() {
-    return Expanded(
-      child: InkWell(
-        // ignore: avoid_print
-        onTap: () => print('exit'),
-        child: Container(
-          height: 50.0,
-          decoration: BoxDecoration(
-            border: Border.all(),
-            color: const Color(0xFF404A5C),
-          ),
-          child: const Center(
-            child: Text(
-              "EDIT PROFILE",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
+    return InkWell(
+      // ignore: avoid_print
+      onTap: () => print('exit'),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          border: Border.all(),
+          color: const Color(0xFF404A5C),
+        ),
+        child: const Center(
+          child: Text(
+            "EDIT PROFILE",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -331,50 +311,58 @@ class NgoUserProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          _buildCoverImage(screenSize),
-          SafeArea(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: screenSize.height / 5.4,
-                ),
-                _buildProfileImage(),
-                _buildFullName(),
-                _buildStatus(context),
-                _buildStatContainer(),
-                const SizedBox(
-                  height: 25,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildBio(
-                      context,
-                      _poc_name,
-                      "POC",
-                      const Icon(Icons.supervised_user_circle_outlined),
+      body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: 813,
+          width: double.maxFinite,
+          color: Colors.white,
+          child: Stack(
+            children: <Widget>[
+              _buildCoverImage(screenSize),
+              SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: screenSize.height / 5.4,
                     ),
-                    _buildBio(
-                      context,
-                      _poc_contact,
-                      "Contact",
-                      const Icon(Icons.phone_android_outlined),
+                    _buildProfileImage(),
+                    _buildFullName(),
+                    _buildStatus(context),
+                    _buildStatContainer(),
+                    const SizedBox(
+                      height: 25,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildBio(
+                          _poc_name,
+                          "POC",
+                          const Icon(Icons.supervised_user_circle_outlined),
+                        ),
+                        _buildBio(
+                          _poc_contact,
+                          "Contact",
+                          const Icon(Icons.phone_android_outlined),
+                        ),
+                      ],
+                    ),
+                    _buildSeparator(screenSize),
+                    SizedBox(height: screenSize.height / 22),
+                    _buildSearchButton(screenSize, context),
+                    SizedBox(
+                      height: screenSize.height / 36,
+                    ),
+                    _buildButtons(context),
+                    SizedBox(height: screenSize.height / 38),
+                    _buildShowStatus(),
                   ],
                 ),
-                _buildSeparator(screenSize),
-                const SizedBox(height: 40.0),
-                _buildSearchButton(screenSize),
-                const SizedBox(height: 40.0),
-                _buildButtons(context),
-                const SizedBox(height: 15.0),
-                _buildShowStatus(),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
