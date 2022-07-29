@@ -1,0 +1,8 @@
+import 'package:flutter/material.dart';
+
+late TextEditingController edittaskNameController;
+late TextEditingController editcontactController;
+late TextEditingController editlocationController;
+late TextEditingController editstartcontroller;
+late TextEditingController editendcontroller;
+late TextEditingController editdiscriptionController;

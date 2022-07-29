@@ -1,18 +1,20 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/views/NGO/create_opportunity.dart';
 import '../notes_view.dart';
 
-class UserProfilePage extends StatelessWidget {
+class NgoUserProfile extends StatelessWidget {
   final String _fullName = "Haseeb Ahmed";
   final String _status = "NGO Manager";
-  final String _bio =
-      "\"Patricia's friend who was here hardly had any issues at all, but she wasn't telling the truth. Yesterday, before she left to go home,\"";
-  final String _hours = "1000";
-  final String _projects = "200";
+  final String _hours_offered = "1000";
+  final String _projects_offered = "200";
+  final String _volunteer_engaged = "4.1k";
   final String _rating = "5.0";
+  final String _poc_name = "Haseeb Ahmed";
+  final String _poc_contact = "03044630011";
 
   Widget _buildCoverImage(Size screeSize) {
     return Container(
@@ -108,7 +110,7 @@ class UserProfilePage extends StatelessWidget {
 
   Widget _buildStatContainer() {
     return Container(
-      height: 60.0,
+      height: 70.0,
       margin: const EdgeInsets.only(top: 8.0),
       decoration: const BoxDecoration(
         color: Color(0xFFEFF4F7),
@@ -116,35 +118,51 @@ class UserProfilePage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          _buildStatItems("Hours", _hours),
-          _buildStatItems("Projects", _projects),
+          _buildStatItems("Hours", _hours_offered),
+          _buildStatItems("Projects", _projects_offered),
+          _buildStatItems("Engagement", _volunteer_engaged),
           _buildStatItems("Rating", _rating),
         ],
       ),
     );
   }
 
-  Widget _buildBio(BuildContext context) {
-    TextStyle _bioText = const TextStyle(
-      fontFamily: 'Spectral',
-      fontWeight: FontWeight.w500,
-      fontStyle: FontStyle.italic,
-      color: Color(0xFF799497),
-      fontSize: 16.0,
-    );
-
+  Widget _buildBio(String value, String s, Icon I) {
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      padding: const EdgeInsets.only(
-        top: 30.0,
-        bottom: 10.0,
-        left: 10.0,
-        right: 10.0,
+      height: 60.0,
+      width: 165,
+      margin: const EdgeInsets.only(top: 8.0),
+      decoration: const BoxDecoration(
+        color: Color(0xFFEFF4F7),
       ),
-      child: Text(
-        _bio,
-        style: _bioText,
-        textAlign: TextAlign.center,
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                I,
+                Text(
+                  s,
+                  style: const TextStyle(
+                    color: Colors.black45,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.black45,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -154,13 +172,18 @@ class UserProfilePage extends StatelessWidget {
       width: screenSize.width / 1.6,
       height: 2.0,
       color: Colors.black54,
-      margin: const EdgeInsets.only(top: 4.0),
+      margin: const EdgeInsets.only(top: 30.0),
     );
   }
 
-  Widget _buildSearchButton(Size screenSize) {
+  Widget _buildSearchButton(Size screenSize, BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          ngoCreateOpportunity,
+          (route) => false,
+        );
+      },
       child: Container(
         width: screenSize.width / 1.4,
         height: 45,
@@ -169,10 +192,11 @@ class UserProfilePage extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: const <Widget>[
+            Icon(Icons.add),
             Text(
-              "Search Opprtunity",
+              "Create Opprtunity",
               style: TextStyle(
                 fontFamily: 'Spectral',
                 fontWeight: FontWeight.w500,
@@ -181,7 +205,6 @@ class UserProfilePage extends StatelessWidget {
                 fontSize: 20.0,
               ),
             ),
-            Icon(Icons.search),
           ],
         ),
       ),
@@ -199,16 +222,21 @@ class UserProfilePage extends StatelessWidget {
           Expanded(
             child: InkWell(
               // ignore: avoid_print
-              onTap: () => print('exit'),
+              onTap: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  viewNgoStatus,
+                  (_) => false,
+                );
+              },
               child: Container(
                 height: 40.0,
                 decoration: BoxDecoration(
                   border: Border.all(),
-                  color: const Color(0xFF404A5C),
+                  color: Color.fromARGB(255, 29, 48, 82),
                 ),
                 child: const Center(
                   child: Text(
-                    "Exit",
+                    "STATUS",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -223,9 +251,9 @@ class UserProfilePage extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              // ignore: avoid_print
               onTap: () async {
                 final shouldLogout = await showLogoutDialog(context);
+                print(shouldLogout);
                 if (shouldLogout) {
                   await FirebaseAuth.instance.signOut();
                   // ignore: use_build_context_synchronously
@@ -259,36 +287,87 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 
-  const UserProfilePage({Key? key}) : super(key: key);
+  Widget _buildShowStatus() {
+    return InkWell(
+      // ignore: avoid_print
+      onTap: () => print('exit'),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          border: Border.all(),
+          color: Color.fromARGB(255, 29, 48, 82),
+        ),
+        child: const Center(
+          child: Text(
+            "EDIT PROFILE",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  const NgoUserProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          _buildCoverImage(screenSize),
-          SafeArea(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: screenSize.height / 5.4,
+      body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: 813,
+          width: double.maxFinite,
+          color: Colors.white,
+          child: Stack(
+            children: <Widget>[
+              _buildCoverImage(screenSize),
+              SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: screenSize.height / 5.4,
+                    ),
+                    _buildProfileImage(),
+                    _buildFullName(),
+                    _buildStatus(context),
+                    _buildStatContainer(),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildBio(
+                          _poc_name,
+                          "POC",
+                          const Icon(Icons.supervised_user_circle_outlined),
+                        ),
+                        _buildBio(
+                          _poc_contact,
+                          "Contact",
+                          const Icon(Icons.phone_android_outlined),
+                        ),
+                      ],
+                    ),
+                    _buildSeparator(screenSize),
+                    SizedBox(height: screenSize.height / 22),
+                    _buildSearchButton(screenSize, context),
+                    SizedBox(
+                      height: screenSize.height / 36,
+                    ),
+                    _buildButtons(context),
+                    SizedBox(height: screenSize.height / 38),
+                    _buildShowStatus(),
+                  ],
                 ),
-                _buildProfileImage(),
-                _buildFullName(),
-                _buildStatus(context),
-                _buildStatContainer(),
-                _buildBio(context),
-                _buildSeparator(screenSize),
-                const SizedBox(height: 40.0),
-                _buildSearchButton(screenSize),
-                const SizedBox(height: 40.0),
-                _buildButtons(context),
-                const SizedBox(height: 20.0),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

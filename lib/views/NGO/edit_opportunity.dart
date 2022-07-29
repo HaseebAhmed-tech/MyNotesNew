@@ -1,46 +1,23 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mynotes/constants/ints.dart';
+import 'package:mynotes/constants/editing_controller.dart';
 import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/strings.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class CreateOpprtunity extends StatefulWidget {
-  const CreateOpprtunity({Key? key}) : super(key: key);
+class EditOpportunity extends StatefulWidget {
+  const EditOpportunity({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _CreateOpprtunityState createState() => _CreateOpprtunityState();
+  _EditOpportunityState createState() => _EditOpportunityState();
 }
 
-class _CreateOpprtunityState extends State<CreateOpprtunity> {
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
-    _startcontroller.dispose();
-    taskNameController.dispose();
-    contactController.dispose();
-    locationController.dispose();
-    descriptionController.dispose();
-    _endcontroller.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    taskNameController = TextEditingController();
-    contactController = TextEditingController();
-    locationController = TextEditingController();
-    descriptionController = TextEditingController();
-    _startcontroller = TextEditingController();
-    _endcontroller = TextEditingController();
-
-    super.initState();
-  }
-
+class _EditOpportunityState extends State<EditOpportunity> {
   Widget _buildprofile(Size screenSize) {
     return Center(
       child: Container(
@@ -74,12 +51,11 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController taskNameController;
   Widget _buildTextForm(String s, Icon I) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
-        controller: taskNameController,
+        controller: edittaskNameController,
         decoration: InputDecoration(
           fillColor: const Color(0xFFEFF4F7),
           filled: true,
@@ -108,12 +84,11 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController contactController;
   Widget _buildContact(String s, Icon I) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
-        controller: contactController,
+        controller: editcontactController,
         decoration: InputDecoration(
           fillColor: const Color(0xFFEFF4F7),
           filled: true,
@@ -142,12 +117,11 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController locationController;
   Widget _buildLocation(String s, Icon I) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
-        controller: locationController,
+        controller: editlocationController,
         decoration: InputDecoration(
           fillColor: const Color(0xFFEFF4F7),
           filled: true,
@@ -176,12 +150,11 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController descriptionController;
   Widget _buildDescription() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
-        controller: descriptionController,
+        controller: editdiscriptionController,
         autofocus: false,
         maxLines: 5,
         minLines: 3,
@@ -216,12 +189,11 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController _startcontroller;
   Widget _buildStartnEnd(String func, BuildContext context) {
     DateTime selectedDate = DateTime.now();
 
     void updateStartTextField() {
-      _startcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
+      editstartcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
     }
 
     Future<void> _selectDate(BuildContext context) async {
@@ -246,7 +218,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         child: SizedBox(
           width: 155,
           child: TextFormField(
-            controller: _startcontroller,
+            controller: editstartcontroller,
             onTap: () async {
               _selectDate(context);
               // await Future.delayed(const Duration(seconds: 5));
@@ -289,12 +261,10 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController _endcontroller;
-
   Widget _buildEnd(String func, BuildContext context) {
     DateTime selectedDate = DateTime.now();
     void updateEndTextField() {
-      _endcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
+      editendcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
     }
 
     Future<void> _selectDate(BuildContext context) async {
@@ -319,7 +289,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         child: SizedBox(
           width: 155,
           child: TextFormField(
-            controller: _endcontroller,
+            controller: editendcontroller,
             onTap: () async {
               _selectDate(context);
             },
@@ -394,7 +364,40 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     return Expanded(
       child: InkWell(
         // ignore: avoid_print
-        onTap: () {},
+        onTap: () {
+          if (task_name.isEmpty ||
+              endDate.isEmpty ||
+              startDate.isEmpty ||
+              location.isEmpty) {
+            Fluttertoast.showToast(
+                msg: "Please fill in all the Fields",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.black54,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          } else {
+            Fluttertoast.showToast(
+                msg: "Opportunity Updated",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.black54,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            itemsData[statusWidgetId]["task-name"] =
+                edittaskNameController.text;
+            itemsData[statusWidgetId]["date"] = editendcontroller.text;
+            // itemsData[statusWidgetId]["volunteers"] = "";
+            // itemsData[statusWidgetId]["status"] = "";
+            itemsData[statusWidgetId]["start-date"] = editstartcontroller.text;
+            itemsData[statusWidgetId]["contact"] = editcontactController.text;
+            itemsData[statusWidgetId]["location"] = editlocationController.text;
+            itemsData[statusWidgetId]["description"] =
+                editdiscriptionController.text;
+          }
+        },
         child: Container(
           height: 40.0,
           decoration: BoxDecoration(
@@ -417,59 +420,43 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  Widget _buildOtherButtons(
-      String s, Color forText, Color forBackground, Size screenSize) {
+  Future<bool> showDeleteDialog(BuildContext context) {
+    return showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Delete"),
+            content: const Text("Are You Sure You Want to Delete?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text("Delete"))
+            ],
+          );
+        }).then((value) => value ?? false);
+  }
+
+  Widget _buildOtherButtons(String s, Color forText, Color forBackground,
+      Size screenSize, BuildContext context) {
     return InkWell(
       // ignore: avoid_print
       onTap: () {
         setState(
-          () {
-            var item = [];
-            task_name = taskNameController.text;
-            endDate = _endcontroller.text;
-            startDate = _startcontroller.text;
-            contact = contactController.text;
-            location = locationController.text;
-            contact = contactController.text;
-            taskDescription = descriptionController.text;
-            //Initially volunteers = 0
-            //Initial Status ="Not Started"
-
-            if (task_name.isEmpty ||
-                endDate.isEmpty ||
-                startDate.isEmpty ||
-                location.isEmpty) {
-              Fluttertoast.showToast(
-                  msg: "Please fill in all the Fields",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black54,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-            } else {
-              Fluttertoast.showToast(
-                  msg: "Opportunity Created",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black54,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-              item = [
-                {
-                  "task-name": task_name,
-                  "date": endDate,
-                  "volunteers": volunteers,
-                  "status": status,
-                  "start-date": startDate,
-                  "contact": contact,
-                  "location": location,
-                  "description": taskDescription,
-                },
-              ];
-              itemsData.add(item[0]);
-              // print(itemsData);
+          () async {
+            final shouldDelete = await showDeleteDialog(context);
+            if (shouldDelete) {
+              itemsData.removeAt(statusWidgetId);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                ngoProfileRoute,
+                (route) => false,
+              );
             }
           },
         );
@@ -614,10 +601,14 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                       ),
                     ),
                     _buildButtons(context),
+                    // _buildOtherButtons(
+                    //     "CREATE", Colors.black, Colors.white, screenSize),
                     _buildOtherButtons(
-                        "CREATE", Colors.black, Colors.white, screenSize),
-                    _buildOtherButtons("DELETE", Colors.white,
-                        const Color.fromARGB(201, 93, 168, 209), screenSize),
+                        "DELETE",
+                        Colors.white,
+                        const Color.fromARGB(201, 93, 168, 209),
+                        screenSize,
+                        context),
                   ],
                 ),
               ),

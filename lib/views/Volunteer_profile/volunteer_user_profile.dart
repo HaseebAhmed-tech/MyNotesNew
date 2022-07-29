@@ -1,21 +1,12 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
+// ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotes/constants/strings.dart';
 import 'package:mynotes/constants/routes.dart';
-import 'package:mynotes/views/NGO/create_opportunity.dart';
 import '../notes_view.dart';
 
-class NgoUserProfile extends StatelessWidget {
-  final String _fullName = "Haseeb Ahmed";
-  final String _status = "NGO Manager";
-  final String _hours_offered = "1000";
-  final String _projects_offered = "200";
-  final String _volunteer_engaged = "4.1k";
-  final String _rating = "5.0";
-  final String _poc_name = "Haseeb Ahmed";
-  final String _poc_contact = "03044630011";
-
+class UserProfilePage extends StatelessWidget {
   Widget _buildCoverImage(Size screeSize) {
     return Container(
       height: screeSize.height / 3,
@@ -56,7 +47,7 @@ class NgoUserProfile extends StatelessWidget {
       fontWeight: FontWeight.w700,
     );
     return Text(
-      _fullName,
+      fullName,
       style: nameTextStyle,
     );
   }
@@ -70,7 +61,7 @@ class NgoUserProfile extends StatelessWidget {
         borderRadius: BorderRadius.circular(4.0),
       ),
       child: Text(
-        _status,
+        myStatus,
         style: const TextStyle(
           fontFamily: 'Spectral',
           color: Colors.black,
@@ -110,7 +101,7 @@ class NgoUserProfile extends StatelessWidget {
 
   Widget _buildStatContainer() {
     return Container(
-      height: 70.0,
+      height: 60.0,
       margin: const EdgeInsets.only(top: 8.0),
       decoration: const BoxDecoration(
         color: Color(0xFFEFF4F7),
@@ -118,51 +109,35 @@ class NgoUserProfile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          _buildStatItems("Hours", _hours_offered),
-          _buildStatItems("Projects", _projects_offered),
-          _buildStatItems("Engagement", _volunteer_engaged),
-          _buildStatItems("Rating", _rating),
+          _buildStatItems("Hours", hours),
+          _buildStatItems("Projects", projects),
+          _buildStatItems("Rating", rating),
         ],
       ),
     );
   }
 
-  Widget _buildBio(String value, String s, Icon I) {
+  Widget _buildBio(BuildContext context) {
+    TextStyle _bioText = const TextStyle(
+      fontFamily: 'Spectral',
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.italic,
+      color: Color(0xFF799497),
+      fontSize: 16.0,
+    );
+
     return Container(
-      height: 60.0,
-      width: 165,
-      margin: const EdgeInsets.only(top: 8.0),
-      decoration: const BoxDecoration(
-        color: Color(0xFFEFF4F7),
+      color: Theme.of(context).scaffoldBackgroundColor,
+      padding: const EdgeInsets.only(
+        top: 30.0,
+        bottom: 10.0,
+        left: 10.0,
+        right: 10.0,
       ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                I,
-                Text(
-                  s,
-                  style: const TextStyle(
-                    color: Colors.black45,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              value,
-              style: const TextStyle(
-                color: Colors.black45,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+      child: Text(
+        bio,
+        style: _bioText,
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -172,18 +147,13 @@ class NgoUserProfile extends StatelessWidget {
       width: screenSize.width / 1.6,
       height: 2.0,
       color: Colors.black54,
-      margin: const EdgeInsets.only(top: 30.0),
+      margin: const EdgeInsets.only(top: 4.0),
     );
   }
 
-  Widget _buildSearchButton(Size screenSize, BuildContext context) {
+  Widget _buildSearchButton(Size screenSize) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          ngoCreateOpportunity,
-          (route) => false,
-        );
-      },
+      onTap: () {},
       child: Container(
         width: screenSize.width / 1.4,
         height: 45,
@@ -192,11 +162,10 @@ class NgoUserProfile extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const <Widget>[
-            Icon(Icons.add),
             Text(
-              "Create Opprtunity",
+              "Search Opprtunity",
               style: TextStyle(
                 fontFamily: 'Spectral',
                 fontWeight: FontWeight.w500,
@@ -205,6 +174,7 @@ class NgoUserProfile extends StatelessWidget {
                 fontSize: 20.0,
               ),
             ),
+            Icon(Icons.search),
           ],
         ),
       ),
@@ -231,7 +201,7 @@ class NgoUserProfile extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Text(
-                    "STATUS",
+                    "Exit",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -282,30 +252,7 @@ class NgoUserProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildShowStatus() {
-    return InkWell(
-      // ignore: avoid_print
-      onTap: () => print('exit'),
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: const Color(0xFF404A5C),
-        ),
-        child: const Center(
-          child: Text(
-            "EDIT PROFILE",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  const NgoUserProfile({Key? key}) : super(key: key);
+  const UserProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -313,10 +260,8 @@ class NgoUserProfile extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
-          height: 813,
-          width: double.maxFinite,
-          color: Colors.white,
+        child: SizedBox(
+          height: screenSize.height + 100,
           child: Stack(
             children: <Widget>[
               _buildCoverImage(screenSize),
@@ -330,33 +275,13 @@ class NgoUserProfile extends StatelessWidget {
                     _buildFullName(),
                     _buildStatus(context),
                     _buildStatContainer(),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildBio(
-                          _poc_name,
-                          "POC",
-                          const Icon(Icons.supervised_user_circle_outlined),
-                        ),
-                        _buildBio(
-                          _poc_contact,
-                          "Contact",
-                          const Icon(Icons.phone_android_outlined),
-                        ),
-                      ],
-                    ),
+                    _buildBio(context),
                     _buildSeparator(screenSize),
-                    SizedBox(height: screenSize.height / 22),
-                    _buildSearchButton(screenSize, context),
-                    SizedBox(
-                      height: screenSize.height / 36,
-                    ),
+                    const SizedBox(height: 40.0),
+                    _buildSearchButton(screenSize),
+                    const SizedBox(height: 40.0),
                     _buildButtons(context),
-                    SizedBox(height: screenSize.height / 38),
-                    _buildShowStatus(),
+                    const SizedBox(height: 20.0),
                   ],
                 ),
               ),

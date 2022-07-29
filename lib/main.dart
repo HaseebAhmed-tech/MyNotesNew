@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/views/NGO/create_opportunity.dart';
-import 'package:mynotes/views/NGO/ngo_main.dart';
-import 'package:mynotes/views/Volunteer_profile/volunteer_main.dart';
+import 'package:mynotes/views/NGO/edit_opportunity.dart';
+import 'package:mynotes/views/NGO/ngo_user_profile.dart';
+import 'package:mynotes/views/NGO/project_completion.dart';
+import 'package:mynotes/views/NGO/view_status.dart';
+import 'package:mynotes/views/Volunteer_profile/volunteer_user_profile.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notes_view.dart';
 import 'package:mynotes/views/register_view.dart';
@@ -28,6 +31,8 @@ void main() {
           userProfile: (context) => const UserProfilePage(),
           ngoCreateOpportunity: (context) => const CreateOpprtunity(),
           ngoProfileRoute: (context) => const NgoUserProfile(),
+          viewNgoStatus: (context) => const ViewStatus(),
+          editOpportunity: (context) => const EditOpportunity(),
         }),
   );
 }
