@@ -2,7 +2,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:mynotes/constants/bools.dart';
 import 'package:mynotes/constants/editing_controller.dart';
 import 'package:mynotes/constants/ints.dart';
 import 'package:mynotes/constants/lists.dart';
@@ -33,8 +32,8 @@ class _ViewStatusState extends State<ViewStatus> {
   Widget _buildprofile(Size screenSize) {
     return Center(
       child: Container(
-        width: 110.0,
-        height: 110.0,
+        width: screenSize.width / 3.25,
+        height: screenSize.width / 3.25,
         decoration: BoxDecoration(
           image: const DecorationImage(
             image: AssetImage("assets/images/profilepic.jpeg"),
@@ -47,20 +46,6 @@ class _ViewStatusState extends State<ViewStatus> {
           ),
         ),
       ),
-    );
-  }
-
-//Profile Name
-  Widget _buildProfileName() {
-    const TextStyle nameTextStyle = TextStyle(
-      fontFamily: 'Roboto',
-      color: Colors.black,
-      fontSize: 26.0,
-      fontWeight: FontWeight.w700,
-    );
-    return Text(
-      fullName,
-      style: nameTextStyle,
     );
   }
 
@@ -179,7 +164,7 @@ class _ViewStatusState extends State<ViewStatus> {
                     height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 178.0),
+                    padding: EdgeInsets.only(left: screenSize.width / 2),
                     child: textStatus,
                   ),
                 ],
@@ -337,9 +322,6 @@ class _ViewStatusState extends State<ViewStatus> {
             editOpportunity,
             (route) => false,
           );
-
-          // taskNameController.text = textName.data.toString();
-          // taskNameController.text = itemsData[itemsData[]];
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 15),
@@ -391,118 +373,100 @@ class _ViewStatusState extends State<ViewStatus> {
     getpostData(screenSize);
     return Scaffold(
       //Scaffold To Hold The Widget
-      body: GestureDetector(
-        // To Unselect Drop Drown Menue and hide Edit Button
-        onTap: () {
-          // FocusManager.instance.primaryFocus?.unfocus();
-          setState(() {
-            isVisible = false;
-          });
-        },
-        child: SafeArea(
-          //To Avoid Any Changes in Phone Shape
+      body: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: GestureDetector(
+          // To Unselect Drop Drown Menue and hide Edit Button
+          onTap: () {
+            // FocusManager.instance.primaryFocus?.unfocus();
+            setState(() {
+              isVisible = false;
+            });
+          },
+          child: SafeArea(
+            //To Avoid Any Changes in Phone Shape
 
-          child: Container(
-            //To Add Background Color
-            color: const Color.fromARGB(150, 93, 169, 209),
-            child: Padding(
-              //Give Equal Padding All Around
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                //Adjust All Elemts in A column
-                children: <Widget>[
-                  const SizedBox(height: 25), //Provide Gap on Top
-                  Container(
-                    //Show Profile
-                    height: screenSize.height / 6.5,
-                    decoration: const BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(103, 31, 81, 108),
-                          offset: Offset(
-                            5.0,
-                            5.0,
-                          ),
-                          blurRadius: 5.0,
-                          spreadRadius: 2.0,
-                        ), //BoxShadow
-                        BoxShadow(
-                          color: Colors.white,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0,
-                        ), //BoxShadow
-                      ],
+            child: Container(
+              height: screenSize.height,
+              //To Add Background Color
+              color: const Color.fromARGB(150, 93, 169, 209),
+              child: Padding(
+                //Give Equal Padding All Around
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  //Adjust All Elemts in A column
+                  children: <Widget>[
+                    SizedBox(
+                        height: screenSize.height / 90), //Provide Gap on Top
+                    _buildprofile(screenSize),
+
+                    SizedBox(
+                      //Padding
+                      height: screenSize.height / 45,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        _buildprofile(screenSize),
-                        _buildProfileName(),
-                      ],
+                    Container(
+                      //To Align Drop Down Menu
+                      alignment: Alignment.topRight,
+                      color: Colors.black12,
+                      child: dropDownSelect(screenSize),
                     ),
-                  ),
-                  const SizedBox(
-                    //Padding
-                    height: 35,
-                  ),
-                  Container(
-                    //Contains Drop Down Menu AND Status Cards
-                    decoration: const BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(103, 31, 81, 108),
-                          offset: Offset(
-                            5.0,
-                            5.0,
-                          ),
-                          blurRadius: 5.0,
-                          spreadRadius: 2.0,
-                        ), //BoxShadow
-                        BoxShadow(
-                          color: Colors.white,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0,
-                        ), //BoxShadow
-                      ],
-                    ),
-                    width: screenSize.width / 1.05,
-                    height: screenSize.height / 2,
-                    child: SingleChildScrollView(
-                      //Allow Scrolling
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(
-                        //Contains Drop Down Menu AND Status Cards
-                        children: [
-                          Container(
-                            //To Align Drop Down Menu
-                            alignment: Alignment.topRight,
-                            child: dropDownSelect(screenSize),
-                          ),
-                          SizedBox(
-                            //Contains Status Cards
-                            height: double.maxFinite,
-                            child: ListView.builder(
-                              itemCount: finalList.length,
-                              physics: const BouncingScrollPhysics(),
-                              itemBuilder: (context, int index) {
-                                return finalList[index];
-                              },
+                    Container(
+                      //Contains Drop Down Menu AND Status Cards
+                      decoration: const BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(103, 31, 81, 108),
+                            offset: Offset(
+                              5.0,
+                              5.0,
                             ),
-                          ),
+                            blurRadius: 5.0,
+                            spreadRadius: 2.0,
+                          ), //BoxShadow
+                          BoxShadow(
+                            color: Colors.white,
+                            offset: Offset(0.0, 0.0),
+                            blurRadius: 0.0,
+                            spreadRadius: 0.0,
+                          ), //BoxShadow
                         ],
                       ),
+                      width: screenSize.width / 1.05,
+                      height: screenSize.height / 2,
+                      child: SingleChildScrollView(
+                        //Allow Scrolling
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          //Contains Drop Down Menu AND Status Cards
+                          children: [
+                            SizedBox(
+                              //Contains Status Cards
+                              height: screenSize.height / 1,
+                              child: ListView.builder(
+                                itemCount: finalList.length,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, int index) {
+                                  return finalList[index];
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    //Padding
-                    height: 25,
-                  ),
-                  _buildButtons(context), //Buttons
-                  _buildOtherButtons(
-                      "EDIT", Colors.black, Colors.white, screenSize),
-                ],
+                    SizedBox(
+                      //Padding
+                      height: screenSize.height / 25,
+                    ),
+                    _buildButtons(context), //Buttons
+                    SizedBox(
+                      //Padding
+                      height: screenSize.height / 155,
+                    ),
+                    _buildOtherButtons(
+                        "EDIT", Colors.black, Colors.white, screenSize),
+                  ],
+                ),
               ),
             ),
           ),

@@ -179,9 +179,8 @@ class NgoUserProfile extends StatelessWidget {
   Widget _buildSearchButton(Size screenSize, BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamedAndRemoveUntil(
+        Navigator.of(context).pushNamed(
           ngoCreateOpportunity,
-          (route) => false,
         );
       },
       child: Container(
@@ -223,16 +222,15 @@ class NgoUserProfile extends StatelessWidget {
             child: InkWell(
               // ignore: avoid_print
               onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
+                Navigator.of(context).pushNamed(
                   viewNgoStatus,
-                  (_) => false,
                 );
               },
               child: Container(
                 height: 40.0,
                 decoration: BoxDecoration(
                   border: Border.all(),
-                  color: Color.fromARGB(255, 29, 48, 82),
+                  color: const Color(0xff0095FF),
                 ),
                 child: const Center(
                   child: Text(
@@ -287,7 +285,7 @@ class NgoUserProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildShowStatus() {
+  Widget _buildEditProfile() {
     return InkWell(
       // ignore: avoid_print
       onTap: () => print('exit'),
@@ -295,7 +293,7 @@ class NgoUserProfile extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           border: Border.all(),
-          color: Color.fromARGB(255, 29, 48, 82),
+          color: const Color(0xff0095FF),
         ),
         child: const Center(
           child: Text(
@@ -319,7 +317,7 @@ class NgoUserProfile extends StatelessWidget {
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
-          height: 813,
+          height: 846.5,
           width: double.maxFinite,
           color: Colors.white,
           child: Stack(
@@ -361,7 +359,7 @@ class NgoUserProfile extends StatelessWidget {
                     ),
                     _buildButtons(context),
                     SizedBox(height: screenSize.height / 38),
-                    _buildShowStatus(),
+                    _buildEditProfile(),
                   ],
                 ),
               ),

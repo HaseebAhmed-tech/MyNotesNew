@@ -197,7 +197,7 @@ class UserProfilePage extends StatelessWidget {
                 height: 40.0,
                 decoration: BoxDecoration(
                   border: Border.all(),
-                  color: const Color(0xFF404A5C),
+                  color: const Color.fromARGB(255, 29, 48, 82),
                 ),
                 child: const Center(
                   child: Text(

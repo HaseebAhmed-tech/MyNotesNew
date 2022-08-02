@@ -44,8 +44,8 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
   Widget _buildprofile(Size screenSize) {
     return Center(
       child: Container(
-        width: 110.0,
-        height: 110.0,
+        width: screenSize.width / 3.25,
+        height: screenSize.width / 3.25,
         decoration: BoxDecoration(
           image: const DecorationImage(
             image: AssetImage("assets/images/profilepic.jpeg"),
@@ -53,7 +53,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
           ),
           borderRadius: BorderRadius.circular(80.0),
           border: Border.all(
-            color: const Color.fromRGBO(96, 125, 139, 1),
+            color: const Color.fromARGB(255, 19, 94, 131),
             width: 5.0,
           ),
         ),
@@ -61,163 +61,158 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  Widget _buildProfileName() {
-    const TextStyle nameTextStyle = TextStyle(
-      fontFamily: 'Roboto',
-      color: Colors.black,
-      fontSize: 26.0,
-      fontWeight: FontWeight.w700,
-    );
-    return Text(
-      profileName,
-      style: nameTextStyle,
-    );
-  }
-
   late TextEditingController taskNameController;
-  Widget _buildTextForm(String s, Icon I) {
+  Widget _buildTextForm(String s, Icon I, Size screeSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: TextFormField(
-        controller: taskNameController,
-        decoration: InputDecoration(
-          fillColor: const Color(0xFFEFF4F7),
-          filled: true,
-          prefixIcon: I,
-          labelText: s,
-          labelStyle: const TextStyle(
-            color: Colors.black45,
-            fontFamily: "Spectral",
-            fontSize: 20,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: Colors.white, width: 1),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
-              color: Colors.black,
-              width: 2,
+      child: SizedBox(
+        width: screeSize.width / 1.18,
+        child: TextFormField(
+          controller: taskNameController,
+          decoration: InputDecoration(
+            fillColor: const Color(0xFFEFF4F7),
+            filled: true,
+            prefixIcon: I,
+            labelText: s,
+            labelStyle: const TextStyle(
+              color: Colors.black45,
+              fontFamily: "Spectral",
+              fontSize: 20,
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Colors.white, width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 2,
+              ),
+            ),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
         ),
-        keyboardType: TextInputType.emailAddress,
       ),
     );
   }
 
   late TextEditingController contactController;
-  Widget _buildContact(String s, Icon I) {
+  Widget _buildContact(String s, Icon I, Size screenSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: TextFormField(
-        controller: contactController,
-        decoration: InputDecoration(
-          fillColor: const Color(0xFFEFF4F7),
-          filled: true,
-          prefixIcon: I,
-          labelText: s,
-          labelStyle: const TextStyle(
-            color: Colors.black45,
-            fontFamily: "Spectral",
-            fontSize: 20,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: Colors.white, width: 1),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
-              color: Colors.black,
-              width: 2,
+      child: SizedBox(
+        width: screenSize.width / 1.18,
+        child: TextFormField(
+          controller: contactController,
+          decoration: InputDecoration(
+            fillColor: const Color(0xFFEFF4F7),
+            filled: true,
+            prefixIcon: I,
+            labelText: s,
+            labelStyle: const TextStyle(
+              color: Colors.black45,
+              fontFamily: "Spectral",
+              fontSize: 20,
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Colors.white, width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 2,
+              ),
+            ),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
         ),
-        keyboardType: TextInputType.emailAddress,
       ),
     );
   }
 
   late TextEditingController locationController;
-  Widget _buildLocation(String s, Icon I) {
+  Widget _buildLocation(String s, Icon I, Size screenSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: TextFormField(
-        controller: locationController,
-        decoration: InputDecoration(
-          fillColor: const Color(0xFFEFF4F7),
-          filled: true,
-          prefixIcon: I,
-          labelText: s,
-          labelStyle: const TextStyle(
-            color: Colors.black45,
-            fontFamily: "Spectral",
-            fontSize: 20,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: Colors.white, width: 1),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
-              color: Colors.black,
-              width: 2,
+      child: SizedBox(
+        width: screenSize.width / 1.18,
+        child: TextFormField(
+          controller: locationController,
+          decoration: InputDecoration(
+            fillColor: const Color(0xFFEFF4F7),
+            filled: true,
+            prefixIcon: I,
+            labelText: s,
+            labelStyle: const TextStyle(
+              color: Colors.black45,
+              fontFamily: "Spectral",
+              fontSize: 20,
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Colors.white, width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 2,
+              ),
+            ),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
         ),
-        keyboardType: TextInputType.emailAddress,
       ),
     );
   }
 
   late TextEditingController descriptionController;
-  Widget _buildDescription() {
+  Widget _buildDescription(Size screenSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: TextFormField(
-        controller: descriptionController,
-        autofocus: false,
-        maxLines: 5,
-        minLines: 3,
-        decoration: InputDecoration(
-          fillColor: const Color(0xFFEFF4F7),
-          filled: true,
-          prefixIcon: const Icon(
-            Icons.app_registration_rounded,
-            color: Color.fromARGB(200, 105, 190, 235),
-          ),
-          labelText: 'Task Description',
-          labelStyle: const TextStyle(
-            color: Colors.black45,
-            fontFamily: "Spectral",
-            fontSize: 20,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: Colors.white, width: 1),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
-              color: Colors.black,
-              width: 2,
+      child: SizedBox(
+        width: screenSize.width / 1.18,
+        child: TextFormField(
+          controller: descriptionController,
+          autofocus: false,
+          maxLines: 5,
+          minLines: 3,
+          decoration: InputDecoration(
+            fillColor: const Color(0xFFEFF4F7),
+            filled: true,
+            prefixIcon: const Icon(
+              Icons.app_registration_rounded,
+              color: Color.fromARGB(200, 105, 190, 235),
             ),
+            labelText: 'Task Description',
+            labelStyle: const TextStyle(
+              color: Colors.black45,
+              fontFamily: "Spectral",
+              fontSize: 20,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Colors.white, width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 2,
+              ),
+            ),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
         ),
-        keyboardType: TextInputType.emailAddress,
       ),
     );
   }
 
   late TextEditingController _startcontroller;
-  Widget _buildStartnEnd(String func, BuildContext context) {
+  Widget _buildStartnEnd(String func, BuildContext context, Size screenSize) {
     DateTime selectedDate = DateTime.now();
 
     void updateStartTextField() {
@@ -244,7 +239,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       child: GestureDetector(
         // onTap: () => _controller.text= "${selectedDate.toLocal()}".split(' ')[0],
         child: SizedBox(
-          width: 155,
+          width: screenSize.width / 2.8,
           child: TextFormField(
             controller: _startcontroller,
             onTap: () async {
@@ -280,7 +275,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                   width: 2,
                 ),
               ),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
             ),
             // initialValue: "${selectedDate.toLocal()}".split(' ')[0],
           ),
@@ -291,7 +286,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
 
   late TextEditingController _endcontroller;
 
-  Widget _buildEnd(String func, BuildContext context) {
+  Widget _buildEnd(String func, BuildContext context, Size sccreenSize) {
     DateTime selectedDate = DateTime.now();
     void updateEndTextField() {
       _endcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
@@ -317,7 +312,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       child: GestureDetector(
         // onTap: () => _selectDate(context),
         child: SizedBox(
-          width: 155,
+          width: sccreenSize.width / 2.8,
           child: TextFormField(
             controller: _endcontroller,
             onTap: () async {
@@ -351,66 +346,9 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                   width: 2,
                 ),
               ),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
             ),
             // initialValue: "${selectedDate.toLocal()}".split(' ')[0],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButtonGrey(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        // ignore: avoid_print
-        onTap: () {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            ngoProfileRoute,
-            (route) => false,
-          );
-        },
-        child: Container(
-          height: 40.0,
-          decoration: BoxDecoration(
-            border: Border.all(),
-            color: const Color.fromARGB(150, 93, 169, 209),
-          ),
-          child: const Center(
-            child: Text(
-              "PROFILE",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButtonWhite() {
-    return Expanded(
-      child: InkWell(
-        // ignore: avoid_print
-        onTap: () {},
-        child: Container(
-          height: 40.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(),
-          ),
-          child: const Center(
-            child: Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                "UPDATE!",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
           ),
         ),
       ),
@@ -477,7 +415,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       child: Padding(
         padding: const EdgeInsets.only(top: 15),
         child: Container(
-          width: screenSize.width / 1.15,
+          width: screenSize.width / 1.25,
           height: 50,
           decoration: BoxDecoration(
             // borderRadius: BorderRadius.circular(15),
@@ -516,24 +454,6 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  Widget _buildButtons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 16.0,
-      ),
-      child: Row(
-        children: <Widget>[
-          _buildButtonGrey(context),
-          const SizedBox(
-            width: 10.0,
-          ),
-          _buildButtonWhite(),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -544,8 +464,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          decoration:
-              const BoxDecoration(color: Color.fromARGB(150, 93, 169, 209)),
+          decoration: const BoxDecoration(color: Color(0xff0095FF)),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: SafeArea(
@@ -553,71 +472,62 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 25),
-                    Container(
-                      height: screenSize.height / 6.5,
-                      decoration: const BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromARGB(103, 31, 81, 108),
-                            offset: Offset(
-                              5.0,
-                              5.0,
-                            ),
-                            blurRadius: 5.0,
-                            spreadRadius: 2.0,
-                          ), //BoxShadow
-                          BoxShadow(
-                            color: Colors.white,
-                            offset: Offset(0.0, 0.0),
-                            blurRadius: 0.0,
-                            spreadRadius: 0.0,
-                          ), //BoxShadow
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          _buildprofile(screenSize),
-                          _buildProfileName(),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 35),
+                    _buildprofile(screenSize),
+
+                    SizedBox(height: screenSize.height / 19),
                     _buildTextForm(
                       "Task Name",
                       const Icon(
                         Icons.border_color_outlined,
                         color: Color.fromARGB(200, 105, 190, 235),
                       ),
+                      screenSize,
                     ),
-                    _buildDescription(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        _buildStartnEnd("Start", context),
-                        _buildEnd("End", context),
-                      ],
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _buildDescription(screenSize),
+                    SizedBox(
+                      height: screenSize.height / 32,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          _buildStartnEnd("Start", context, screenSize),
+                          _buildEnd("End", context, screenSize),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: screenSize.height / 32,
                     ),
                     _buildContact(
-                      "Location",
-                      const Icon(
-                        Icons.map_outlined,
-                        color: Color.fromARGB(200, 105, 190, 235),
-                      ),
+                        "Location",
+                        const Icon(
+                          Icons.map_outlined,
+                          color: Color.fromARGB(200, 105, 190, 235),
+                        ),
+                        screenSize),
+                    SizedBox(
+                      height: screenSize.height / 32,
                     ),
                     _buildLocation(
-                      "Contant",
-                      const Icon(
-                        Icons.phone_rounded,
-                        color: Color.fromARGB(200, 105, 190, 235),
-                      ),
+                        "Contact",
+                        const Icon(
+                          Icons.phone_rounded,
+                          color: Color.fromARGB(200, 105, 190, 235),
+                        ),
+                        screenSize),
+                    SizedBox(
+                      height: screenSize.height / 32,
                     ),
-                    _buildButtons(context),
+                    // _buildButtons(context),
                     _buildOtherButtons(
                         "CREATE", Colors.black, Colors.white, screenSize),
-                    _buildOtherButtons("DELETE", Colors.white,
-                        const Color.fromARGB(201, 93, 168, 209), screenSize),
+                    // _buildOtherButtons("DELETE", Colors.white,
+                    //     const Color.fromARGB(201, 93, 168, 209), screenSize),
                   ],
                 ),
               ),
