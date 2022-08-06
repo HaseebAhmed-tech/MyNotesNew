@@ -522,118 +522,129 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                 endDate.isNotEmpty &&
                 startTime.isNotEmpty &&
                 endTime.isNotEmpty) {
-              hoursOffered = "${calculateHoursOffered()}";
+              if (endTime[2] != ":") {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Enter time in 00:00 format",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+              } else {
+                hoursOffered = "${calculateHoursOffered()}";
 
-              var startingTime = _startTimeController.text;
-              // var startMins = int.parse(startingTime.split(":")[1]);
-              // var startHours = int.parse(startingTime.split(":")[0]);
-              var endingTime = _endTimeController.text;
-              // var endMins = int.parse(endingTime.split(":")[1]);
-              // var endHours = int.parse(endingTime.split(":")[0]);
-              var startingDate = _startcontroller.text;
-              // var startMonth = int.parse(startingDate.split("-")[1]);
-              // var startYear = int.parse(startDate.split("-")[0]);
-              // var startDay = int.parse(startingDate.split("-")[2]);
-              var endingDate = _endcontroller.text;
-              // var endMonth = int.parse(endingDate.split("-")[1]);
-              // var endYear = int.parse(endingDate.split("-")[0]);
-              // var endDay = int.parse(endingDate.split("-")[2]);
-              bool check1 = true;
-              bool check2 = true;
-              if (task_name.isEmpty ||
-                  taskDescription.isEmpty ||
-                  location.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.redAccent,
-                  content: Text(
-                    "Please Fill in All the Fields",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ));
-                check1 = false;
-              }
-              if (int.parse(startingDate.split("-")[2]) >
-                  int.parse(endingDate.split("-")[2])) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.redAccent,
-                  content: Text(
-                    "Incorrect Date Entered",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ));
-                check2 = false;
-              } else if (int.parse(startingDate.split("-")[1]) >
-                  int.parse(endingDate.split("-")[1])) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.redAccent,
-                  content: Text(
-                    "Incorrect Date Entered",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ));
-                check2 = false;
-              } else if (int.parse(startDate.split("-")[0]) >
-                  int.parse(endingDate.split("-")[0])) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.redAccent,
-                  content: Text(
-                    "Incorrect Date Entered",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ));
-                check2 = false;
-              }
-
-              //Initially volunteers = 0
-              //Initial Status ="Not Started"
-
-              else if (endDate == startDate) {
-                if ((int.parse(startingTime.split(":")[0]) ==
-                            int.parse(endingTime.split(":")[0]) &&
-                        int.parse(endingTime.split(":")[1]) <
-                            int.parse(startingTime.split(":")[1])) ||
-                    (int.parse(startingTime.split(":")[0]) >
-                        int.parse(endingTime.split(":")[0]))) {
+                var startingTime = _startTimeController.text;
+                // var startMins = int.parse(startingTime.split(":")[1]);
+                // var startHours = int.parse(startingTime.split(":")[0]);
+                var endingTime = _endTimeController.text;
+                // var endMins = int.parse(endingTime.split(":")[1]);
+                // var endHours = int.parse(endingTime.split(":")[0]);
+                var startingDate = _startcontroller.text;
+                // var startMonth = int.parse(startingDate.split("-")[1]);
+                // var startYear = int.parse(startDate.split("-")[0]);
+                // var startDay = int.parse(startingDate.split("-")[2]);
+                var endingDate = _endcontroller.text;
+                // var endMonth = int.parse(endingDate.split("-")[1]);
+                // var endYear = int.parse(endingDate.split("-")[0]);
+                // var endDay = int.parse(endingDate.split("-")[2]);
+                bool check1 = true;
+                bool check2 = true;
+                if (task_name.isEmpty ||
+                    taskDescription.isEmpty ||
+                    location.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     backgroundColor: Colors.redAccent,
                     content: Text(
-                      "Incorrect Time Entered",
+                      "Please Fill in All the Fields",
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                  check1 = false;
+                }
+                if (int.parse(startingDate.split("-")[2]) >
+                    int.parse(endingDate.split("-")[2])) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.redAccent,
+                    content: Text(
+                      "Incorrect Date Entered",
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                  check2 = false;
+                } else if (int.parse(startingDate.split("-")[1]) >
+                    int.parse(endingDate.split("-")[1])) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.redAccent,
+                    content: Text(
+                      "Incorrect Date Entered",
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                  check2 = false;
+                } else if (int.parse(startDate.split("-")[0]) >
+                    int.parse(endingDate.split("-")[0])) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.redAccent,
+                    content: Text(
+                      "Incorrect Date Entered",
                       style: TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                   ));
                   check2 = false;
                 }
-              }
-              if (check1 && check2) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.greenAccent,
-                  content: Text(
-                    "Opportunity Created",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ));
-                item = [
-                  {
-                    "task-name": task_name,
-                    "date": endDate,
-                    "volunteers": volunteers,
-                    "status": status,
-                    "start-date": startDate,
-                    "contact": contact,
-                    "location": location,
-                    "description": taskDescription,
-                    "start-time": startTime,
-                    "end-time": endTime,
-                    "hours-offered": hoursOffered,
-                  },
-                ];
-                itemsData.add(item[0]);
+
+                //Initially volunteers = 0
+                //Initial Status ="Not Started"
+
+                else if (endDate == startDate) {
+                  if ((int.parse(startingTime.split(":")[0]) ==
+                              int.parse(endingTime.split(":")[0]) &&
+                          int.parse(endingTime.split(":")[1]) <
+                              int.parse(startingTime.split(":")[1])) ||
+                      (int.parse(startingTime.split(":")[0]) >
+                          int.parse(endingTime.split(":")[0]))) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: Colors.redAccent,
+                      content: Text(
+                        "Incorrect Time Entered",
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ));
+                    check2 = false;
+                  }
+                }
+                if (check1 && check2) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.greenAccent,
+                    content: Text(
+                      "Opportunity Created",
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                  item = [
+                    {
+                      "task-name": task_name,
+                      "date": endDate,
+                      "volunteers": volunteers,
+                      "status": status,
+                      "start-date": startDate,
+                      "contact": contact,
+                      "location": location,
+                      "description": taskDescription,
+                      "start-time": startTime,
+                      "end-time": endTime,
+                      "hours-offered": hoursOffered,
+                    },
+                  ];
+                  itemsData.add(item[0]);
+                }
               }
             } else {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

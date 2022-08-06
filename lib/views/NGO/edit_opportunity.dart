@@ -524,105 +524,117 @@ class _EditOpportunityState extends State<EditOpportunity> {
               editEndTimeController.text.isNotEmpty &&
               editendcontroller.text.isNotEmpty &&
               editStratTimeContoller.text.isNotEmpty) {
-            var startingTime = editStratTimeContoller.text;
-            var endingTime = editEndTimeController.text;
-            var startingDate = editstartcontroller.text;
-            var endingDate = editendcontroller.text;
+            if (editEndTimeController.text[2] != ":") {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(
+                  "Enter time in 00:00 format",
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ));
+            } else {
+              var startingTime = editStratTimeContoller.text;
+              var endingTime = editEndTimeController.text;
+              var startingDate = editstartcontroller.text;
+              var endingDate = editendcontroller.text;
 
-            bool check1 = true;
-            bool check2 = true;
-            if (edittaskNameController.text.isEmpty ||
-                editlocationController.text.isEmpty ||
-                editdiscriptionController.text.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: Text(
-                  "Please Fill in All the Fields",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ));
-              check1 = false;
-            }
-
-            if (int.parse(startingDate.split("-")[2]) >
-                int.parse(endingDate.split("-")[2])) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: Text(
-                  "Incorrect Date Entered",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ));
-              check2 = false;
-            } else if (int.parse(startingDate.split("-")[1]) >
-                int.parse(endingDate.split("-")[1])) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: Text(
-                  "Incorrect Date Entered",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ));
-              check2 = false;
-            } else if (int.parse(startDate.split("-")[0]) >
-                int.parse(endingDate.split("-")[0])) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: Text(
-                  "Incorrect Date Entered",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ));
-              check2 = false;
-            } else if (editendcontroller.text == editstartcontroller.text) {
-              if ((int.parse(startingTime.split(":")[0]) ==
-                          int.parse(endingTime.split(":")[0]) &&
-                      int.parse(endingTime.split(":")[1]) <
-                          int.parse(startingTime.split(":")[1])) ||
-                  (int.parse(startingTime.split(":")[0]) >
-                      int.parse(endingTime.split(":")[0]))) {
+              bool check1 = true;
+              bool check2 = true;
+              if (edittaskNameController.text.isEmpty ||
+                  editlocationController.text.isEmpty ||
+                  editdiscriptionController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: Colors.redAccent,
                   content: Text(
-                    "Incorrect Time Entered",
+                    "Please Fill in All the Fields",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                check1 = false;
+              }
+
+              if (int.parse(startingDate.split("-")[2]) >
+                  int.parse(endingDate.split("-")[2])) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Incorrect Date Entered",
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ));
                 check2 = false;
+              } else if (int.parse(startingDate.split("-")[1]) >
+                  int.parse(endingDate.split("-")[1])) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Incorrect Date Entered",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                check2 = false;
+              } else if (int.parse(startDate.split("-")[0]) >
+                  int.parse(endingDate.split("-")[0])) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Incorrect Date Entered",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                check2 = false;
+              } else if (editendcontroller.text == editstartcontroller.text) {
+                if ((int.parse(startingTime.split(":")[0]) ==
+                            int.parse(endingTime.split(":")[0]) &&
+                        int.parse(endingTime.split(":")[1]) <
+                            int.parse(startingTime.split(":")[1])) ||
+                    (int.parse(startingTime.split(":")[0]) >
+                        int.parse(endingTime.split(":")[0]))) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.redAccent,
+                    content: Text(
+                      "Incorrect Time Entered",
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                  check2 = false;
+                }
               }
-            }
-            if (check1 && check2) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.greenAccent,
-                content: Text(
-                  "Opportunity Updated",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ));
-              itemsData[statusWidgetId]["task-name"] =
-                  edittaskNameController.text;
-              itemsData[statusWidgetId]["date"] = editendcontroller.text;
-              // itemsData[statusWidgetId]["volunteers"] = "";
-              // itemsData[statusWidgetId]["status"] = "";
-              itemsData[statusWidgetId]["start-date"] =
-                  editstartcontroller.text;
-              itemsData[statusWidgetId]["contact"] = editcontactController.text;
-              itemsData[statusWidgetId]["location"] =
-                  editlocationController.text;
-              itemsData[statusWidgetId]["description"] =
-                  editdiscriptionController.text;
-              itemsData[statusWidgetId]["start-time"] =
-                  editStratTimeContoller.text;
-              itemsData[statusWidgetId]["end-time"] =
-                  editEndTimeController.text;
-              itemsData[statusWidgetId]["hours-offered"] =
-                  "${calculateHoursOffered()}";
+              if (check1 && check2) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.greenAccent,
+                  content: Text(
+                    "Opportunity Updated",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                itemsData[statusWidgetId]["task-name"] =
+                    edittaskNameController.text;
+                itemsData[statusWidgetId]["date"] = editendcontroller.text;
+                // itemsData[statusWidgetId]["volunteers"] = "";
+                // itemsData[statusWidgetId]["status"] = "";
+                itemsData[statusWidgetId]["start-date"] =
+                    editstartcontroller.text;
+                itemsData[statusWidgetId]["contact"] =
+                    editcontactController.text;
+                itemsData[statusWidgetId]["location"] =
+                    editlocationController.text;
+                itemsData[statusWidgetId]["description"] =
+                    editdiscriptionController.text;
+                itemsData[statusWidgetId]["start-time"] =
+                    editStratTimeContoller.text;
+                itemsData[statusWidgetId]["end-time"] =
+                    editEndTimeController.text;
+                itemsData[statusWidgetId]["hours-offered"] =
+                    "${calculateHoursOffered()}";
+              }
             }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
