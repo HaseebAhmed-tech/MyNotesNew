@@ -228,9 +228,9 @@ class NgoUserProfile extends StatelessWidget {
               },
               child: Container(
                 height: 40.0,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  color: const Color(0xff0095FF),
+                decoration: const BoxDecoration(
+                  // border: Border.all(),
+                  color: Color(0xff0095FF),
                 ),
                 child: const Center(
                   child: Text(
@@ -251,7 +251,6 @@ class NgoUserProfile extends StatelessWidget {
             child: InkWell(
               onTap: () async {
                 final shouldLogout = await showLogoutDialog(context);
-                print(shouldLogout);
                 if (shouldLogout) {
                   await FirebaseAuth.instance.signOut();
                   // ignore: use_build_context_synchronously
@@ -291,9 +290,9 @@ class NgoUserProfile extends StatelessWidget {
       onTap: () => print('exit'),
       child: Container(
         height: 50,
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: const Color(0xff0095FF),
+        decoration: const BoxDecoration(
+          // border: Border.all(),
+          color: Color(0xff0095FF),
         ),
         child: const Center(
           child: Text(

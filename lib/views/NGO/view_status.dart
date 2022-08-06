@@ -25,6 +25,8 @@ class _ViewStatusState extends State<ViewStatus> {
     editstartcontroller = TextEditingController();
     editendcontroller = TextEditingController();
     editdiscriptionController = TextEditingController();
+    editStratTimeContoller = TextEditingController();
+    editEndTimeController = TextEditingController();
     super.initState();
   }
 
@@ -101,8 +103,13 @@ class _ViewStatusState extends State<ViewStatus> {
   late String editCheckTextContact;
   late String editCheckTextLocation;
   late String editCheckTextDescription;
+  late String editCheckStartTime;
+  late String editCheckEndTime;
 
   Widget _statusBuilding(var task, Size screenSize, var responseList) {
+    var assignId = 1;
+    responseList[task]["id"] = assignId;
+    assignId++;
     Text textDate = Text(
       "Date: ${responseList[task]["date"]}",
       style: const TextStyle(fontSize: 17, color: Colors.black),
@@ -111,64 +118,133 @@ class _ViewStatusState extends State<ViewStatus> {
     Text textName = Text(
       "${responseList[task]["task-name"]}",
       style: const TextStyle(
-          color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold),
+          color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
     );
-
     Text textVolunteers = Text(
-      "Volunteers: ${responseList[task]["volunteers"]}",
+      "${responseList[task]["volunteers"]}",
       textAlign: TextAlign.center,
       style: const TextStyle(
-          fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+          fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+    );
+
+    Row textshowVolunteers = Row(
+      children: [
+        Text(
+          "Volunteers: ",
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        ),
+        textVolunteers,
+      ],
     );
 
     Text textStatus = Text(responseList[task]["status"],
         style: const TextStyle(
-            fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+            fontSize: 12, color: Colors.black, fontWeight: FontWeight.bold),
         textAlign: TextAlign.right);
     return GestureDetector(
       onTap: () {
-        setState(() {
-          isVisible = true;
-          editCheckTextName = textName;
-          editCheckTextDate = textDate;
-          editCheckTextStatus = textStatus;
-          editCheckTextVolunteers = textVolunteers;
-        });
+        setState(() {});
       },
       child: Container(
-        height: screenSize.height / 5.3,
+        height: screenSize.height / 7,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-            color: const Color.fromARGB(150, 93, 169, 209),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
-            ]),
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(103, 31, 81, 108),
+              offset: Offset(
+                0.1,
+                5.0,
+              ),
+              blurRadius: 5.0,
+              spreadRadius: 2.0,
+            ), //BoxShadow
+            BoxShadow(
+              color: Colors.white,
+              offset: Offset(0.0, 0.0),
+              blurRadius: 0.0,
+              spreadRadius: 0.0,
+            ), //BoxShadow
+          ],
+        ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          padding: const EdgeInsets.only(left: 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 75,
+                height: 75,
+                decoration: BoxDecoration(
+                  color: Color(0xff0095FF),
+                  // border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Center(child: textStatus),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
-                    width: 200,
-                    height: 30,
-                    child: textName,
+                  textName,
+                  const SizedBox(
+                    height: 5,
                   ),
-                  const SizedBox(height: 12),
                   textDate,
-                  textVolunteers,
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  textshowVolunteers,
                   const SizedBox(
                     height: 10,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: screenSize.width / 2),
-                    child: textStatus,
-                  ),
                 ],
               ),
+              SizedBox(
+                width: screenSize.width / 30,
+              ),
+              Visibility(
+                child: IconButton(
+                  onPressed: () {
+                    editCheckTextName = textName;
+                    editCheckTextDate = textDate;
+                    editCheckTextStatus = textStatus;
+                    editCheckTextVolunteers = textVolunteers;
+                    int i = 0;
+                    for (i; i < itemsData.length; i++) {
+                      if (itemsData[i]["task-name"] ==
+                          editCheckTextName.data.toString()) {
+                        editCheckTextContact = itemsData[i]["contact"];
+                        editCheckTextLocation = itemsData[i]["location"];
+                        editCheckTextDescription = itemsData[i]["description"];
+                        editCheckTextStart = itemsData[i]["start-date"];
+                        editCheckStartTime = itemsData[i]["start-time"];
+                        editCheckEndTime = itemsData[i]["end-time"];
+                        break;
+                      }
+                    }
+                    statusWidgetId = i;
+                    edittaskNameController.text =
+                        editCheckTextName.data.toString();
+                    editendcontroller.text =
+                        editCheckTextDate.data.toString().split(": ")[1];
+                    editcontactController.text = editCheckTextContact;
+                    editlocationController.text = editCheckTextLocation;
+                    editdiscriptionController.text = editCheckTextDescription;
+                    editstartcontroller.text = editCheckTextStart;
+                    editStratTimeContoller.text = editCheckStartTime;
+                    editEndTimeController.text = editCheckEndTime;
+
+                    Navigator.of(context).pushNamed(
+                      editOpportunity,
+                    );
+                  },
+                  icon: Icon(Icons.edit),
+                ),
+              )
             ],
           ),
         ),
@@ -185,7 +261,6 @@ class _ViewStatusState extends State<ViewStatus> {
 
     List<dynamic> listItems = [];
     // ignore: avoid_function_literals_in_foreach_calls
-
     var task = 1;
     while (task < responseList.length) {
       if (responseList[task]["status"] != dropDownValue && !showAllElements) {
@@ -204,29 +279,25 @@ class _ViewStatusState extends State<ViewStatus> {
 
 //Profile(Returns To Profile Page)
   Widget _buildButtonBlue(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        // ignore: avoid_print
-        onTap: () {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            ngoProfileRoute,
-            (route) => false,
-          );
-        },
-        child: Container(
-          height: 40.0,
-          decoration: BoxDecoration(
-            border: Border.all(),
-            color: const Color.fromARGB(150, 93, 169, 209),
-          ),
-          child: const Center(
-            child: Text(
-              "PROFILE",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+    return InkWell(
+      // ignore: avoid_print
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          ngoCreateOpportunity,
+        );
+      },
+      child: Container(
+        height: 60.0,
+        width: 60,
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xff0095FF)),
+          borderRadius: BorderRadius.circular(100),
+          color: const Color(0xff0095FF),
+        ),
+        child: const Center(
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
           ),
         ),
       ),
@@ -234,56 +305,55 @@ class _ViewStatusState extends State<ViewStatus> {
   }
 
 //Add (Returns To Create Opportunity)
-  Widget _buildButtonWhite(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        // ignore: avoid_print
-        onTap: () {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            ngoCreateOpportunity,
-            (route) => false,
-          );
-        },
-        child: Container(
-          height: 40.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(),
-          ),
-          child: const Center(
-            child: Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                "Add",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildButtonWhite(BuildContext context) {
+  //   return Expanded(
+  //     child: InkWell(
+  //       // ignore: avoid_print
+  //       onTap: () {
+  //         Navigator.of(context).pushNamed(
+  //           ngoCreateOpportunity,
+  //         );
+  //       },
+  //       child: Container(
+  //         height: 40.0,
+  //         decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           border: Border.all(),
+  //         ),
+  //         child: const Center(
+  //           child: Padding(
+  //             padding: EdgeInsets.all(10.0),
+  //             child: Text(
+  //               "Add",
+  //               style: TextStyle(
+  //                 fontWeight: FontWeight.w600,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
 //Combines the Two Buttons
-  Widget _buildButtons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 16.0,
-      ),
-      child: Row(
-        children: <Widget>[
-          _buildButtonBlue(context),
-          const SizedBox(
-            width: 10.0,
-          ),
-          _buildButtonWhite(context),
-        ],
-      ),
-    );
-  }
+  // Widget _buildButtons(BuildContext context) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(
+  //       vertical: 8.0,
+  //       horizontal: 16.0,
+  //     ),
+  //     child: Row(
+  //       children: <Widget>[
+  //         _buildButtonBlue(context),
+  //         const SizedBox(
+  //           width: 10.0,
+  //         ),
+  //         // _buildButtonWhite(context),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   bool isVisible = false;
 //Edit (Returns To Edit Opportunity Page)
@@ -386,87 +456,85 @@ class _ViewStatusState extends State<ViewStatus> {
           child: SafeArea(
             //To Avoid Any Changes in Phone Shape
 
-            child: Container(
-              height: screenSize.height,
-              //To Add Background Color
-              color: const Color.fromARGB(150, 93, 169, 209),
-              child: Padding(
-                //Give Equal Padding All Around
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  //Adjust All Elemts in A column
-                  children: <Widget>[
-                    SizedBox(
-                        height: screenSize.height / 90), //Provide Gap on Top
-                    _buildprofile(screenSize),
+            child: Padding(
+              //Give Equal Padding All Around
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                //Adjust All Elemts in A column
+                children: <Widget>[
+                  SizedBox(height: screenSize.height / 80), //Provide Gap on Top
+                  _buildprofile(screenSize),
 
-                    SizedBox(
-                      //Padding
-                      height: screenSize.height / 45,
+                  SizedBox(
+                    //Padding
+                    height: screenSize.height / 20,
+                  ),
+                  Container(
+                    //To Align Drop Down Menu
+                    alignment: Alignment.topRight,
+                    color: Color.fromARGB(49, 76, 166, 239),
+                    child: dropDownSelect(screenSize),
+                  ),
+                  Container(
+                    //Contains Drop Down Menu AND Status Cards
+                    padding: EdgeInsets.only(top: 20),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(103, 31, 81, 108),
+                          offset: Offset(
+                            0.0,
+                            2.0,
+                          ),
+                          blurRadius: 5.0,
+                          spreadRadius: 2.0,
+                        ), //BoxShadow
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 0.0,
+                          spreadRadius: 0.0,
+                        ), //BoxShadow
+                      ],
                     ),
-                    Container(
-                      //To Align Drop Down Menu
-                      alignment: Alignment.topRight,
-                      color: Colors.black12,
-                      child: dropDownSelect(screenSize),
-                    ),
-                    Container(
-                      //Contains Drop Down Menu AND Status Cards
-                      decoration: const BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromARGB(103, 31, 81, 108),
-                            offset: Offset(
-                              5.0,
-                              5.0,
+                    width: screenSize.width / 1.05,
+                    height: screenSize.height / 2,
+                    child: SingleChildScrollView(
+                      //Allow Scrolling
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        //Contains Drop Down Menu AND Status Cards
+                        children: [
+                          SizedBox(
+                            //Contains Status Cards
+                            height: screenSize.height / 1,
+                            child: ListView.builder(
+                              itemCount: finalList.length,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, int index) {
+                                return finalList[index];
+                              },
                             ),
-                            blurRadius: 5.0,
-                            spreadRadius: 2.0,
-                          ), //BoxShadow
-                          BoxShadow(
-                            color: Colors.white,
-                            offset: Offset(0.0, 0.0),
-                            blurRadius: 0.0,
-                            spreadRadius: 0.0,
-                          ), //BoxShadow
+                          ),
                         ],
                       ),
-                      width: screenSize.width / 1.05,
-                      height: screenSize.height / 2,
-                      child: SingleChildScrollView(
-                        //Allow Scrolling
-                        physics: const BouncingScrollPhysics(),
-                        child: Column(
-                          //Contains Drop Down Menu AND Status Cards
-                          children: [
-                            SizedBox(
-                              //Contains Status Cards
-                              height: screenSize.height / 1,
-                              child: ListView.builder(
-                                itemCount: finalList.length,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, int index) {
-                                  return finalList[index];
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
-                    SizedBox(
-                      //Padding
-                      height: screenSize.height / 25,
-                    ),
-                    _buildButtons(context), //Buttons
-                    SizedBox(
-                      //Padding
-                      height: screenSize.height / 155,
-                    ),
-                    _buildOtherButtons(
-                        "EDIT", Colors.black, Colors.white, screenSize),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    //Padding
+                    height: screenSize.height / 25,
+                  ),
+                  _buildButtonBlue(context), //Buttons
+                  SizedBox(
+                    //Padding
+                    height: screenSize.height / 155,
+                  ),
+                  _buildOtherButtons(
+                      "EDIT", Colors.black, Colors.white, screenSize),
+                ],
               ),
             ),
           ),

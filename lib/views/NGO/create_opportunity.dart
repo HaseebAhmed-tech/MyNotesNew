@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/constants/ints.dart';
 import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/strings.dart';
-import 'package:mynotes/constants/routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateOpprtunity extends StatefulWidget {
@@ -26,6 +25,8 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     locationController.dispose();
     descriptionController.dispose();
     _endcontroller.dispose();
+    _startTimeController.dispose();
+    _endTimeController.dispose();
     super.dispose();
   }
 
@@ -37,8 +38,59 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     descriptionController = TextEditingController();
     _startcontroller = TextEditingController();
     _endcontroller = TextEditingController();
+    _startTimeController = TextEditingController();
+    _endTimeController = TextEditingController();
 
     super.initState();
+  }
+
+  double calculateHoursOffered() {
+    var startingTime = _startTimeController.text;
+    var startMins = int.parse(startingTime.split(":")[1]);
+    var startHours = int.parse(startingTime.split(":")[0]);
+    var endingTime = _endTimeController.text;
+    var endMins = int.parse(endingTime.split(":")[1]);
+    var endHours = int.parse(endingTime.split(":")[0]);
+    var startingDate = _startcontroller.text;
+    var startMonth = int.parse(startingDate.split("-")[1]);
+    var startYear = int.parse(startDate.split("-")[0]);
+    var startDay = int.parse(startingDate.split("-")[2]);
+    var endingDate = _endcontroller.text;
+    var endMonth = int.parse(endingDate.split("-")[1]);
+    var endYear = int.parse(endingDate.split("-")[0]);
+
+    var endDay = int.parse(endingDate.split("-")[2]);
+    double toPrecision(double x) => double.parse(x.toStringAsFixed(2));
+
+    if (startYear == endYear &&
+        startMonth == endMonth &&
+        startDay == endDay &&
+        startHours == endHours) {
+      return toPrecision((endMins - startMins) / 60);
+    } else if (startYear == endYear &&
+        startMonth == endMonth &&
+        startDay == endDay) {
+      return toPrecision(((endMins - startMins) / 60) + (endHours - startHours))
+          .abs();
+    } else if (startYear == endYear && startMonth == endMonth) {
+      return toPrecision(
+              ((((endMins - startMins) / 60) + (endHours - startHours))) +
+                  ((endDay - startDay) * 24))
+          .abs();
+    } else if (startYear == endYear) {
+      return toPrecision(
+              ((((((endMins - startMins) / 60) + (endHours - startHours))) +
+                      ((endDay - startDay) * 24))) +
+                  ((endMonth - startMonth) * 730))
+          .abs();
+    } else {
+      return toPrecision(
+              ((((((((endMins - startMins) / 60) + (endHours - startHours))) +
+                          ((endDay - startDay) * 24))) +
+                      ((endMonth - startMonth) * 730))) +
+                  (endYear - startYear) * 8760)
+          .abs();
+    }
   }
 
   Widget _buildprofile(Size screenSize) {
@@ -64,9 +116,10 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
   late TextEditingController taskNameController;
   Widget _buildTextForm(String s, Icon I, Size screeSize) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 12),
       child: SizedBox(
         width: screeSize.width / 1.18,
+        height: screeSize.height / 15,
         child: TextFormField(
           controller: taskNameController,
           decoration: InputDecoration(
@@ -80,13 +133,13 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
               fontSize: 20,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: Colors.white, width: 1),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
-                color: Colors.black,
+                color: Colors.blueAccent,
                 width: 2,
               ),
             ),
@@ -103,6 +156,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       padding: const EdgeInsets.only(bottom: 15),
       child: SizedBox(
         width: screenSize.width / 1.18,
+        height: screenSize.height / 15,
         child: TextFormField(
           controller: contactController,
           decoration: InputDecoration(
@@ -116,13 +170,13 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
               fontSize: 20,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: Colors.white, width: 1),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
-                color: Colors.black,
+                color: Colors.blueAccent,
                 width: 2,
               ),
             ),
@@ -139,12 +193,17 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       padding: const EdgeInsets.only(bottom: 15),
       child: SizedBox(
         width: screenSize.width / 1.18,
+        height: screenSize.height / 15,
         child: TextFormField(
           controller: locationController,
           decoration: InputDecoration(
             fillColor: const Color(0xFFEFF4F7),
             filled: true,
             prefixIcon: I,
+            suffixIcon: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.edit_location),
+            ),
             labelText: s,
             labelStyle: const TextStyle(
               color: Colors.black45,
@@ -152,13 +211,13 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
               fontSize: 20,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: Colors.white, width: 1),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
-                color: Colors.black,
+                color: Colors.blueAccent,
                 width: 2,
               ),
             ),
@@ -175,6 +234,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       padding: const EdgeInsets.only(bottom: 15),
       child: SizedBox(
         width: screenSize.width / 1.18,
+        height: screenSize.height / 9,
         child: TextFormField(
           controller: descriptionController,
           autofocus: false,
@@ -185,7 +245,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
             filled: true,
             prefixIcon: const Icon(
               Icons.app_registration_rounded,
-              color: Color.fromARGB(200, 105, 190, 235),
+              color: Color.fromARGB(255, 39, 90, 118),
             ),
             labelText: 'Task Description',
             labelStyle: const TextStyle(
@@ -200,12 +260,95 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
-                color: Colors.black,
+                color: Colors.blueAccent,
                 width: 2,
               ),
             ),
             floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
+        ),
+      ),
+    );
+  }
+
+  late TextEditingController _startTimeController;
+  Widget showStartTime(Size screenSize) {
+    DateTime selectedDate = DateTime.now();
+    return SizedBox(
+      width: screenSize.width / 2.8,
+      height: screenSize.height / 14,
+      child: TextFormField(
+        onTap: () {
+          _startTimeController.text =
+              "${"${selectedDate.toLocal()}".split(' ')[1].split(":")[0]}:${"${selectedDate.toLocal()}".split(' ')[1].split(":")[1]}";
+        },
+        controller: _startTimeController,
+        readOnly: true,
+        autofocus: false,
+        decoration: InputDecoration(
+          fillColor: const Color(0xFFEFF4F7),
+          filled: true,
+          prefixIcon: const Icon(
+            Icons.access_time_outlined,
+            color: Color.fromARGB(255, 39, 90, 118),
+          ),
+          labelText: "Start",
+          labelStyle: const TextStyle(
+            color: Colors.black45,
+            fontFamily: "Spectral",
+            fontSize: 18,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.white, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: Colors.blueAccent,
+              width: 2,
+            ),
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+        ),
+      ),
+    );
+  }
+
+  late TextEditingController _endTimeController;
+  Widget showEndTime(Size screenSize) {
+    return SizedBox(
+      width: screenSize.width / 2.8,
+      height: screenSize.height / 14,
+      child: TextFormField(
+        controller: _endTimeController,
+        keyboardType: TextInputType.datetime,
+        autofocus: false,
+        decoration: InputDecoration(
+          fillColor: const Color(0xFFEFF4F7),
+          filled: true,
+          prefixIcon: const Icon(
+            Icons.access_time_outlined,
+            color: Color.fromARGB(255, 39, 90, 118),
+          ),
+          labelText: "Finish",
+          labelStyle: const TextStyle(
+            color: Colors.black45,
+            fontFamily: "Spectral",
+            fontSize: 18,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.white, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: Colors.blueAccent,
+              width: 2,
+            ),
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
         ),
       ),
     );
@@ -239,7 +382,8 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       child: GestureDetector(
         // onTap: () => _controller.text= "${selectedDate.toLocal()}".split(' ')[0],
         child: SizedBox(
-          width: screenSize.width / 2.8,
+          width: screenSize.width / 2.35,
+          height: screenSize.height / 13.5,
           child: TextFormField(
             controller: _startcontroller,
             onTap: () async {
@@ -255,7 +399,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
               filled: true,
               prefixIcon: const Icon(
                 Icons.calendar_month_outlined,
-                color: Colors.black54,
+                color: Color.fromARGB(255, 39, 90, 118),
               ),
               // prefixText: "${selectedDate.toLocal()}".split(' ')[0],
               labelText: func,
@@ -265,13 +409,13 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                 fontSize: 20,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: Colors.white, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(
-                  color: Colors.black,
+                  color: Colors.blueAccent,
                   width: 2,
                 ),
               ),
@@ -312,7 +456,8 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
       child: GestureDetector(
         // onTap: () => _selectDate(context),
         child: SizedBox(
-          width: sccreenSize.width / 2.8,
+          width: sccreenSize.width / 2.35,
+          height: sccreenSize.height / 13.5,
           child: TextFormField(
             controller: _endcontroller,
             onTap: () async {
@@ -326,7 +471,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
               filled: true,
               prefixIcon: const Icon(
                 Icons.calendar_month_outlined,
-                color: Colors.black54,
+                color: Color.fromARGB(255, 39, 90, 118),
               ),
               // prefixText: "${selectedDate.toLocal()}".split(' ')[0],
               labelText: func,
@@ -336,13 +481,13 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                 fontSize: 20,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: Colors.white, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(
-                  color: Colors.black,
+                  color: Colors.blueAccent,
                   width: 2,
                 ),
               ),
@@ -370,52 +515,143 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
             location = locationController.text;
             contact = contactController.text;
             taskDescription = descriptionController.text;
-            //Initially volunteers = 0
-            //Initial Status ="Not Started"
+            startTime = _startTimeController.text;
+            endTime = _endTimeController.text;
 
-            if (task_name.isEmpty ||
-                endDate.isEmpty ||
-                startDate.isEmpty ||
-                location.isEmpty) {
-              Fluttertoast.showToast(
-                  msg: "Please fill in all the Fields",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black54,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
+            if (startDate.isNotEmpty &&
+                endDate.isNotEmpty &&
+                startTime.isNotEmpty &&
+                endTime.isNotEmpty) {
+              hoursOffered = "${calculateHoursOffered()}";
+
+              var startingTime = _startTimeController.text;
+              // var startMins = int.parse(startingTime.split(":")[1]);
+              // var startHours = int.parse(startingTime.split(":")[0]);
+              var endingTime = _endTimeController.text;
+              // var endMins = int.parse(endingTime.split(":")[1]);
+              // var endHours = int.parse(endingTime.split(":")[0]);
+              var startingDate = _startcontroller.text;
+              // var startMonth = int.parse(startingDate.split("-")[1]);
+              // var startYear = int.parse(startDate.split("-")[0]);
+              // var startDay = int.parse(startingDate.split("-")[2]);
+              var endingDate = _endcontroller.text;
+              // var endMonth = int.parse(endingDate.split("-")[1]);
+              // var endYear = int.parse(endingDate.split("-")[0]);
+              // var endDay = int.parse(endingDate.split("-")[2]);
+              bool check1 = true;
+              bool check2 = true;
+              if (task_name.isEmpty ||
+                  taskDescription.isEmpty ||
+                  location.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Please Fill in All the Fields",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                check1 = false;
+              }
+              if (int.parse(startingDate.split("-")[2]) >
+                  int.parse(endingDate.split("-")[2])) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Incorrect Date Entered",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                check2 = false;
+              } else if (int.parse(startingDate.split("-")[1]) >
+                  int.parse(endingDate.split("-")[1])) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Incorrect Date Entered",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                check2 = false;
+              } else if (int.parse(startDate.split("-")[0]) >
+                  int.parse(endingDate.split("-")[0])) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: Text(
+                    "Incorrect Date Entered",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                check2 = false;
+              }
+
+              //Initially volunteers = 0
+              //Initial Status ="Not Started"
+
+              else if (endDate == startDate) {
+                if ((int.parse(startingTime.split(":")[0]) ==
+                            int.parse(endingTime.split(":")[0]) &&
+                        int.parse(endingTime.split(":")[1]) <
+                            int.parse(startingTime.split(":")[1])) ||
+                    (int.parse(startingTime.split(":")[0]) >
+                        int.parse(endingTime.split(":")[0]))) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.redAccent,
+                    content: Text(
+                      "Incorrect Time Entered",
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                  check2 = false;
+                }
+              }
+              if (check1 && check2) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: Colors.greenAccent,
+                  content: Text(
+                    "Opportunity Created",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ));
+                item = [
+                  {
+                    "task-name": task_name,
+                    "date": endDate,
+                    "volunteers": volunteers,
+                    "status": status,
+                    "start-date": startDate,
+                    "contact": contact,
+                    "location": location,
+                    "description": taskDescription,
+                    "start-time": startTime,
+                    "end-time": endTime,
+                    "hours-offered": hoursOffered,
+                  },
+                ];
+                itemsData.add(item[0]);
+              }
             } else {
-              Fluttertoast.showToast(
-                  msg: "Opportunity Created",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black54,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-              item = [
-                {
-                  "task-name": task_name,
-                  "date": endDate,
-                  "volunteers": volunteers,
-                  "status": status,
-                  "start-date": startDate,
-                  "contact": contact,
-                  "location": location,
-                  "description": taskDescription,
-                },
-              ];
-              itemsData.add(item[0]);
-              // print(itemsData);
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(
+                  "Please Fill in All the fields",
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ));
             }
           },
         );
       },
       child: Padding(
-        padding: const EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.only(top: 10),
         child: Container(
-          width: screenSize.width / 1.25,
+          width: screenSize.width / 1.5,
           height: 50,
           decoration: BoxDecoration(
             // borderRadius: BorderRadius.circular(15),
@@ -464,7 +700,19 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          decoration: const BoxDecoration(color: Color(0xff0095FF)),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF73AEF5),
+                Color(0xFF61A4F1),
+                Color(0xFF478DE0),
+                Color(0xFF398AE5)
+              ],
+              stops: [0.1, 0.4, 0.7, 0.9],
+            ),
+          ),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: SafeArea(
@@ -479,49 +727,57 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                       "Task Name",
                       const Icon(
                         Icons.border_color_outlined,
-                        color: Color.fromARGB(200, 105, 190, 235),
+                        color: Color.fromARGB(255, 39, 90, 118),
                       ),
                       screenSize,
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: screenSize.height / 80,
                     ),
                     _buildDescription(screenSize),
                     SizedBox(
-                      height: screenSize.height / 32,
+                      height: screenSize.height / 80,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          _buildStartnEnd("Start", context, screenSize),
-                          _buildEnd("End", context, screenSize),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        _buildStartnEnd("Start", context, screenSize),
+                        _buildEnd("End", context, screenSize),
+                      ],
                     ),
                     SizedBox(
-                      height: screenSize.height / 32,
+                      height: screenSize.height / 200,
                     ),
-                    _buildContact(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        showStartTime(screenSize),
+                        showEndTime(screenSize),
+                      ],
+                    ),
+
+                    SizedBox(
+                      height: screenSize.height / 40,
+                    ),
+                    _buildLocation(
                         "Location",
                         const Icon(
                           Icons.map_outlined,
-                          color: Color.fromARGB(200, 105, 190, 235),
+                          color: Color.fromARGB(255, 39, 90, 118),
                         ),
                         screenSize),
                     SizedBox(
-                      height: screenSize.height / 32,
+                      height: screenSize.height / 80,
                     ),
-                    _buildLocation(
+                    _buildContact(
                         "Contact",
                         const Icon(
                           Icons.phone_rounded,
-                          color: Color.fromARGB(200, 105, 190, 235),
+                          color: Color.fromARGB(255, 39, 90, 118),
                         ),
                         screenSize),
                     SizedBox(
-                      height: screenSize.height / 32,
+                      height: screenSize.height / 90,
                     ),
                     // _buildButtons(context),
                     _buildOtherButtons(

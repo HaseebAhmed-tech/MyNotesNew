@@ -9,6 +9,7 @@ import 'package:mynotes/views/Volunteer_profile/volunteer_user_profile.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notes_view.dart';
 import 'package:mynotes/views/register_view.dart';
+import 'package:mynotes/views/sign_up_view.dart';
 import 'package:mynotes/views/verifyemail_view.dart';
 
 // import 'package:mynotes/views/login_view.dart';
@@ -20,7 +21,7 @@ void main() {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const HomePage(),
+        home: const Home(),
         routes: {
           //Links a String name to a View (Used for named Routes)
           loginRoute: (context) => const LoginView(),
@@ -32,12 +33,13 @@ void main() {
           ngoProfileRoute: (context) => const NgoUserProfile(),
           viewNgoStatus: (context) => const ViewStatus(),
           editOpportunity: (context) => const EditOpportunity(),
+          homePage: (context) => const SignUpScreen(),
         }),
   );
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

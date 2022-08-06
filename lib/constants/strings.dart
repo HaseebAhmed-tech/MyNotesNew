@@ -11,6 +11,8 @@ String endDate = "";
 String status = "Not Started";
 String contact = "";
 String location = "";
+String startTime = "";
+String endTime = "";
 
 //User SignUp
 String fullName = "Haseeb Ahmed";
@@ -23,3 +25,4 @@ String rating = "5.0";
 
 //View Status
 String dropDownValue = "Show All";
+String hoursOffered = "";

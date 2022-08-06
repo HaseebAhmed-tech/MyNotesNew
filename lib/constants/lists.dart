@@ -12,7 +12,10 @@ List<dynamic> itemsData = [
     "start-date": "",
     "contact": "",
     "location": "",
-    "description": ""
+    "description": "",
+    "start-time": "",
+    "end-time": ",",
+    "hours-offered": "",
   },
 ]; //<--Temporay Data-->
 // final itemsData = [

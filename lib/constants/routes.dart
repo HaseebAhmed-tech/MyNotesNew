@@ -1,3 +1,4 @@
+import 'package:mynotes/main.dart';
 import 'package:mynotes/views/NGO/create_opportunity.dart';
 import 'package:mynotes/views/NGO/edit_opportunity.dart';
 
@@ -10,3 +11,4 @@ const ngoCreateOpportunity = "/create-opportunity/";
 const ngoProfileRoute = '/ngo-profile/';
 const viewNgoStatus = '/view-status/';
 const editOpportunity = '/edit-opportunity/';
+const homePage = '/home-page/';

@@ -6,3 +6,5 @@ late TextEditingController editlocationController;
 late TextEditingController editstartcontroller;
 late TextEditingController editendcontroller;
 late TextEditingController editdiscriptionController;
+late TextEditingController editStratTimeContoller;
+late TextEditingController editEndTimeController;
