@@ -1,62 +1,64 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:flutter/material.dart';
-import 'package:mynotes/constants/ints.dart';
-import 'package:mynotes/constants/lists.dart';
-import 'package:mynotes/constants/routes.dart';
-import 'package:mynotes/constants/strings.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import '../../constants/ints.dart';
+import '../../constants/lists.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CreateOpprtunity extends StatefulWidget {
-  const CreateOpprtunity({Key? key}) : super(key: key);
+class CreateOpprtunityNew extends StatefulWidget {
+  const CreateOpprtunityNew({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _CreateOpprtunityState createState() => _CreateOpprtunityState();
+  _CreateOpprtunityNewState createState() => _CreateOpprtunityNewState();
 }
 
-class _CreateOpprtunityState extends State<CreateOpprtunity> {
+class _CreateOpprtunityNewState extends State<CreateOpprtunityNew> {
+  final _formKey = GlobalKey<FormState>();
+  var taskName = "";
+  var description = "";
+  var contactNumber = "";
+  var location = "";
+  var startDate = "";
+  var endDate = "";
+  var startTime = "";
+  var endTime = "";
+  var hoursOffered = "";
+
+  TextEditingController taskNameController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController startTimeController = TextEditingController();
+  TextEditingController endTimeController = TextEditingController();
+  TextEditingController startcontroller = TextEditingController();
+  TextEditingController endcontroller = TextEditingController();
+
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
-    _startcontroller.dispose();
+    startcontroller.dispose();
     taskNameController.dispose();
     contactController.dispose();
     locationController.dispose();
     descriptionController.dispose();
-    _endcontroller.dispose();
-    _startTimeController.dispose();
-    _endTimeController.dispose();
+    endcontroller.dispose();
+    startTimeController.dispose();
+    endTimeController.dispose();
     super.dispose();
   }
 
-  @override
-  void initState() {
-    taskNameController = TextEditingController();
-    contactController = TextEditingController();
-    locationController = TextEditingController();
-    descriptionController = TextEditingController();
-    _startcontroller = TextEditingController();
-    _endcontroller = TextEditingController();
-    _startTimeController = TextEditingController();
-    _endTimeController = TextEditingController();
-
-    super.initState();
-  }
-
   double calculateHoursOffered() {
-    var startingTime = _startTimeController.text;
+    var startingTime = startTimeController.text;
     var startMins = int.parse(startingTime.split(":")[1]);
     var startHours = int.parse(startingTime.split(":")[0]);
-    var endingTime = _endTimeController.text;
+    var endingTime = endTimeController.text;
     var endMins = int.parse(endingTime.split(":")[1]);
     var endHours = int.parse(endingTime.split(":")[0]);
-    var startingDate = _startcontroller.text;
+    var startingDate = startcontroller.text;
     var startMonth = int.parse(startingDate.split("-")[1]);
     var startYear = int.parse(startDate.split("-")[0]);
     var startDay = int.parse(startingDate.split("-")[2]);
-    var endingDate = _endcontroller.text;
+    var endingDate = endcontroller.text;
     var endMonth = int.parse(endingDate.split("-")[1]);
     var endYear = int.parse(endingDate.split("-")[0]);
 
@@ -94,6 +96,42 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     }
   }
 
+  registerOpportunity(String id) async {
+    if (id != null) {
+      try {
+        FirebaseFirestore.instance.collection('opportunities').doc(id).set({
+          'TaskName': taskName,
+          'Description': description,
+          'Contact Number': contactNumber,
+          'location': location,
+          'Start Date': startDate,
+          'End Date': endDate,
+          'Start Time': startTime,
+          'End Time': endTime,
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              "Registered Successfully. Please Log in!!",
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const OpeningScreen(),
+        //   ),
+        // );
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
   Widget _buildprofile(Size screenSize) {
     return Center(
       child: Container(
@@ -101,7 +139,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         height: screenSize.width / 3.25,
         decoration: BoxDecoration(
           image: const DecorationImage(
-            image: AssetImage("assets/images/profilepic.jpeg"),
+            image: AssetImage("assets/profilepic.jpeg"),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(80.0),
@@ -114,7 +152,6 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController taskNameController;
   Widget _buildTextForm(String s, Icon I, Size screeSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -123,6 +160,12 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         height: screeSize.height / 15,
         child: TextFormField(
           controller: taskNameController,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Please Type Something Here';
+            }
+            return null;
+          },
           decoration: InputDecoration(
             fillColor: const Color(0xFFEFF4F7),
             filled: true,
@@ -151,7 +194,6 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController contactController;
   Widget _buildContact(String s, Icon I, Size screenSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -160,6 +202,12 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         height: screenSize.height / 15,
         child: TextFormField(
           controller: contactController,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Please Type Something Here';
+            }
+            return null;
+          },
           decoration: InputDecoration(
             fillColor: const Color(0xFFEFF4F7),
             filled: true,
@@ -183,13 +231,11 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
             ),
             floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
-          keyboardType: TextInputType.number,
         ),
       ),
     );
   }
 
-  late TextEditingController locationController;
   Widget _buildLocation(String s, Icon I, Size screenSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -198,12 +244,23 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         height: screenSize.height / 15,
         child: TextFormField(
           controller: locationController,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Please Type Something Here';
+            }
+            return null;
+          },
           decoration: InputDecoration(
             fillColor: const Color(0xFFEFF4F7),
             filled: true,
             prefixIcon: I,
             suffixIcon: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                // Navigator.of(context)
+                //     .push(MaterialPageRoute(builder: (BuildContext context) {
+                //   return const SearchPlacesScreen();
+                // }));
+              },
               icon: const Icon(Icons.edit_location),
             ),
             labelText: s,
@@ -230,7 +287,6 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController descriptionController;
   Widget _buildDescription(Size screenSize) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -239,6 +295,12 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
         height: screenSize.height / 9,
         child: TextFormField(
           controller: descriptionController,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Please Type Something Here';
+            }
+            return null;
+          },
           autofocus: false,
           maxLines: 5,
           minLines: 3,
@@ -273,18 +335,23 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController _startTimeController;
   Widget showStartTime(Size screenSize) {
     DateTime selectedDate = DateTime.now();
     return SizedBox(
       width: screenSize.width / 2.8,
       height: screenSize.height / 14,
       child: TextFormField(
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please Type Something Here';
+          }
+          return null;
+        },
         onTap: () {
-          _startTimeController.text =
+          startTimeController.text =
               "${"${selectedDate.toLocal()}".split(' ')[1].split(":")[0]}:${"${selectedDate.toLocal()}".split(' ')[1].split(":")[1]}";
         },
-        controller: _startTimeController,
+        controller: startTimeController,
         readOnly: true,
         autofocus: false,
         decoration: InputDecoration(
@@ -317,14 +384,19 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController _endTimeController;
   Widget showEndTime(Size screenSize) {
     return SizedBox(
       width: screenSize.width / 2.8,
       height: screenSize.height / 14,
       child: TextFormField(
-        controller: _endTimeController,
-        // keyboardType: TextInputType.,
+        controller: endTimeController,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please Type Something Here';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.datetime,
         autofocus: false,
         decoration: InputDecoration(
           fillColor: const Color(0xFFEFF4F7),
@@ -356,12 +428,11 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController _startcontroller;
   Widget _buildStartnEnd(String func, BuildContext context, Size screenSize) {
     DateTime selectedDate = DateTime.now();
 
     void updateStartTextField() {
-      _startcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
+      startcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
     }
 
     Future<void> _selectDate(BuildContext context) async {
@@ -387,7 +458,13 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
           width: screenSize.width / 2.35,
           height: screenSize.height / 13.5,
           child: TextFormField(
-            controller: _startcontroller,
+            controller: startcontroller,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please Type Something Here';
+              }
+              return null;
+            },
             onTap: () async {
               _selectDate(context);
               // await Future.delayed(const Duration(seconds: 5));
@@ -430,12 +507,10 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  late TextEditingController _endcontroller;
-
   Widget _buildEnd(String func, BuildContext context, Size sccreenSize) {
     DateTime selectedDate = DateTime.now();
     void updateEndTextField() {
-      _endcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
+      endcontroller.text = "${selectedDate.toLocal()}".split(' ')[0];
     }
 
     Future<void> _selectDate(BuildContext context) async {
@@ -461,7 +536,13 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
           width: sccreenSize.width / 2.35,
           height: sccreenSize.height / 13.5,
           child: TextFormField(
-            controller: _endcontroller,
+            controller: endcontroller,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please Type Something Here';
+              }
+              return null;
+            },
             onTap: () async {
               _selectDate(context);
             },
@@ -502,165 +583,107 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
     );
   }
 
-  Widget _buildOtherButtons(
-      String s, Color forText, Color forBackground, Size screenSize) {
+  Widget _buildOtherButtons(String s, Color forText, Color forBackground,
+      Size screenSize, String userId) {
     return InkWell(
       // ignore: avoid_print
       onTap: () {
-        setState(
-          () {
-            var item = [];
-            task_name = taskNameController.text;
-            endDate = _endcontroller.text;
-            startDate = _startcontroller.text;
-            contact = contactController.text;
-            location = locationController.text;
-            contact = contactController.text;
-            taskDescription = descriptionController.text;
-            startTime = _startTimeController.text;
-            endTime = _endTimeController.text;
+        if (_formKey.currentState!.validate()) {
+          setState(
+            () {
+              taskName = taskNameController.text;
+              endDate = endcontroller.text;
+              startDate = startcontroller.text;
+              contactNumber = contactController.text;
+              location = locationController.text;
+              description = descriptionController.text;
+              startTime = startTimeController.text;
+              endTime = endTimeController.text;
 
-            if (startDate.isNotEmpty &&
-                endDate.isNotEmpty &&
-                startTime.isNotEmpty &&
-                endTime.isNotEmpty) {
-              if (endTime[2] != ":") {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.redAccent,
-                  content: Text(
-                    "Enter time in 00:00 format",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ));
-              } else {
-                hoursOffered = "${calculateHoursOffered()}";
-
-                var startingTime = _startTimeController.text;
-                // var startMins = int.parse(startingTime.split(":")[1]);
-                // var startHours = int.parse(startingTime.split(":")[0]);
-                var endingTime = _endTimeController.text;
-                // var endMins = int.parse(endingTime.split(":")[1]);
-                // var endHours = int.parse(endingTime.split(":")[0]);
-                var startingDate = _startcontroller.text;
-                // var startMonth = int.parse(startingDate.split("-")[1]);
-                // var startYear = int.parse(startDate.split("-")[0]);
-                // var startDay = int.parse(startingDate.split("-")[2]);
-                var endingDate = _endcontroller.text;
-                // var endMonth = int.parse(endingDate.split("-")[1]);
-                // var endYear = int.parse(endingDate.split("-")[0]);
-                // var endDay = int.parse(endingDate.split("-")[2]);
-                bool check1 = true;
-                bool check2 = true;
-                if (task_name.isEmpty ||
-                    taskDescription.isEmpty ||
-                    location.isEmpty) {
+              if (startDate.isNotEmpty &&
+                  endDate.isNotEmpty &&
+                  startTime.isNotEmpty &&
+                  endTime.isNotEmpty) {
+                if (endTime[2] != ":") {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     backgroundColor: Colors.redAccent,
                     content: Text(
-                      "Please Fill in All the Fields",
+                      "Enter time in 00:00 format",
                       style: TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                   ));
-                  check1 = false;
-                }
-                if (int.parse(startingDate.split("-")[2]) >
-                    int.parse(endingDate.split("-")[2])) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    backgroundColor: Colors.redAccent,
-                    content: Text(
-                      "Incorrect Date Entered",
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ));
-                  check2 = false;
-                } else if (int.parse(startingDate.split("-")[1]) >
-                    int.parse(endingDate.split("-")[1])) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    backgroundColor: Colors.redAccent,
-                    content: Text(
-                      "Incorrect Date Entered",
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ));
-                  check2 = false;
-                } else if (int.parse(startDate.split("-")[0]) >
-                    int.parse(endingDate.split("-")[0])) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    backgroundColor: Colors.redAccent,
-                    content: Text(
-                      "Incorrect Date Entered",
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ));
-                  check2 = false;
-                }
+                } else {
+                  hoursOffered = "${calculateHoursOffered()}";
 
-                //Initially volunteers = 0
-                //Initial Status ="Not Started"
-
-                else if (endDate == startDate) {
-                  if ((int.parse(startingTime.split(":")[0]) ==
-                              int.parse(endingTime.split(":")[0]) &&
-                          int.parse(endingTime.split(":")[1]) <
-                              int.parse(startingTime.split(":")[1])) ||
-                      (int.parse(startingTime.split(":")[0]) >
-                          int.parse(endingTime.split(":")[0]))) {
+                  var startingTime = startTimeController.text;
+                  var endingTime = endTimeController.text;
+                  var startingDate = startcontroller.text;
+                  var endingDate = endcontroller.text;
+                  bool check1 = true;
+                  bool check2 = true;
+                  if (int.parse(startingDate.split("-")[2]) >
+                      int.parse(endingDate.split("-")[2])) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       backgroundColor: Colors.redAccent,
                       content: Text(
-                        "Incorrect Time Entered",
+                        "Incorrect Date Entered",
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ));
+                    check2 = false;
+                  } else if (int.parse(startingDate.split("-")[1]) >
+                      int.parse(endingDate.split("-")[1])) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: Colors.redAccent,
+                      content: Text(
+                        "Incorrect Date Entered",
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ));
+                    check2 = false;
+                  } else if (int.parse(startDate.split("-")[0]) >
+                      int.parse(endingDate.split("-")[0])) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: Colors.redAccent,
+                      content: Text(
+                        "Incorrect Date Entered",
                         style: TextStyle(fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ));
                     check2 = false;
                   }
-                }
-                if (check1 && check2) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    backgroundColor: Colors.greenAccent,
-                    content: Text(
-                      "Opportunity Created",
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ));
-                  item = [
-                    {
-                      "task-name": task_name,
-                      "date": endDate,
-                      "volunteers": volunteers,
-                      "status": status,
-                      "start-date": startDate,
-                      "contact": contact,
-                      "location": location,
-                      "description": taskDescription,
-                      "start-time": startTime,
-                      "end-time": endTime,
-                      "hours-offered": hoursOffered,
-                    },
-                  ];
-                  itemsData.add(item[0]);
+
+                  //Initially volunteers = 0
+                  //Initial Status ="Not Started"
+
+                  else if (endDate == startDate) {
+                    if ((int.parse(startingTime.split(":")[0]) ==
+                                int.parse(endingTime.split(":")[0]) &&
+                            int.parse(endingTime.split(":")[1]) <
+                                int.parse(startingTime.split(":")[1])) ||
+                        (int.parse(startingTime.split(":")[0]) >
+                            int.parse(endingTime.split(":")[0]))) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        backgroundColor: Colors.redAccent,
+                        content: Text(
+                          "Incorrect Time Entered",
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ));
+                      check2 = false;
+                    }
+                  }
                 }
               }
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: Text(
-                  "Please Fill in All the fields",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ));
-            }
-          },
-        );
-        Navigator.of(context).popAndPushNamed(viewNgoStatus);
+            },
+          );
+          registerOpportunity(userId);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
@@ -706,32 +729,37 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
 
   @override
   Widget build(BuildContext context) {
+    final routeArg =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    final myId = routeArg['userId'];
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF73AEF5),
-                Color(0xFF61A4F1),
-                Color(0xFF478DE0),
-                Color(0xFF398AE5)
-              ],
-              stops: [0.1, 0.4, 0.7, 0.9],
-            ),
+        body: GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF73AEF5),
+              Color(0xFF61A4F1),
+              Color(0xFF478DE0),
+              Color(0xFF398AE5)
+            ],
+            stops: [0.1, 0.4, 0.7, 0.9],
           ),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
+        ),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     _buildprofile(screenSize),
@@ -795,7 +823,12 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                     ),
                     // _buildButtons(context),
                     _buildOtherButtons(
-                        "CREATE", Colors.black, Colors.white, screenSize),
+                      "CREATE",
+                      Colors.black,
+                      Colors.white,
+                      screenSize,
+                      "myId",
+                    ),
                     // _buildOtherButtons("DELETE", Colors.white,
                     //     const Color.fromARGB(201, 93, 168, 209), screenSize),
                   ],
@@ -805,6 +838,6 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

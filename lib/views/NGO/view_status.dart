@@ -147,6 +147,7 @@ class _ViewStatusState extends State<ViewStatus> {
       },
       child: Container(
         height: screenSize.height / 7,
+        width: double.maxFinite,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: const BoxDecoration(
           boxShadow: [
@@ -171,6 +172,7 @@ class _ViewStatusState extends State<ViewStatus> {
           padding: const EdgeInsets.only(left: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
                 width: 75,
@@ -202,9 +204,6 @@ class _ViewStatusState extends State<ViewStatus> {
                     height: 10,
                   ),
                 ],
-              ),
-              SizedBox(
-                width: screenSize.width / 30,
               ),
               Visibility(
                 child: IconButton(

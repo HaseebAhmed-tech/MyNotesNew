@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/views/Volunteer_profile/volunteer_user_profile.dart';
 import 'package:mynotes/views/sign_up_view.dart';
 import '../utility/show_error_dialog.dart';
 
@@ -280,7 +281,13 @@ class _LoginViewState extends State<LoginView> {
                                       ],
                                     ),
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                          userProfile,
+                                          (route) => false,
+                                        );
+                                      },
                                       child: const Text(
                                         "Volunteer",
                                         style: TextStyle(

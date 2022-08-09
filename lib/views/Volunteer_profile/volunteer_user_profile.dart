@@ -2,20 +2,42 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotes/constants/editing_controller.dart';
 import 'package:mynotes/constants/strings.dart';
 import 'package:mynotes/constants/routes.dart';
 import '../notes_view.dart';
 
-class UserProfilePage extends StatelessWidget {
+class UserProfilePage extends StatefulWidget {
+  const UserProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<UserProfilePage> createState() => _UserProfilePageState();
+}
+
+class _UserProfilePageState extends State<UserProfilePage> {
+  @override
+  void initState() {
+    editUserNameController = TextEditingController();
+    designationController = TextEditingController();
+    editBioController = TextEditingController();
+    editContactController = TextEditingController();
+    super.initState();
+  }
+
   Widget _buildCoverImage(Size screeSize) {
     return Container(
       height: screeSize.height / 3,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/back.jpeg'),
-          fit: BoxFit.cover,
-        ),
-      ),
+      width: double.maxFinite,
+      decoration: const BoxDecoration(),
+      child: cover_image_path != null
+          ? Image.file(
+              cover_image_path!,
+              fit: BoxFit.cover,
+            )
+          : Image.asset(
+              'assets/images/back.jpeg',
+              fit: BoxFit.cover,
+            ),
     );
   }
 
@@ -25,15 +47,22 @@ class UserProfilePage extends StatelessWidget {
         width: 140.0,
         height: 140.0,
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage("assets/images/profilepic.jpeg"),
-            fit: BoxFit.cover,
-          ),
           borderRadius: BorderRadius.circular(80.0),
           border: Border.all(
             color: Colors.white,
             width: 6.0,
           ),
+        ),
+        child: ClipOval(
+          child: profile_image_path != null
+              ? Image.file(
+                  profile_image_path!,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  'assets/images/profilepic.jpeg',
+                  fit: BoxFit.cover,
+                ),
         ),
       ),
     );
@@ -252,7 +281,27 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 
-  const UserProfilePage({Key? key}) : super(key: key);
+  Widget _buildEditProfile(BuildContext context) {
+    return Container(
+        width: double.maxFinite,
+        alignment: Alignment.topRight,
+        child: IconButton(
+          onPressed: () {
+            setState(() {
+              editUserNameController.text = fullName;
+              editContactController.text = poc_contact;
+              editBioController.text = bio;
+              designationController.text = myStatus;
+            });
+
+            Navigator.of(context).pushNamed(editVolunterProfile);
+          },
+          icon: const Icon(
+            Icons.edit,
+            color: Colors.blue,
+          ),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,15 +310,18 @@ class UserProfilePage extends StatelessWidget {
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: SizedBox(
-          height: screenSize.height + 100,
+          height: screenSize.height * 1.04,
           child: Stack(
             children: <Widget>[
               _buildCoverImage(screenSize),
               SafeArea(
                 child: Column(
                   children: <Widget>[
+                    _buildEditProfile(
+                      context,
+                    ),
                     SizedBox(
-                      height: screenSize.height / 5.4,
+                      height: screenSize.height / 7.8,
                     ),
                     _buildProfileImage(),
                     _buildFullName(),
@@ -277,9 +329,9 @@ class UserProfilePage extends StatelessWidget {
                     _buildStatContainer(),
                     _buildBio(context),
                     _buildSeparator(screenSize),
-                    const SizedBox(height: 40.0),
+                    SizedBox(height: screenSize.height / 30),
                     _buildSearchButton(screenSize),
-                    const SizedBox(height: 40.0),
+                    SizedBox(height: screenSize.height / 20),
                     _buildButtons(context),
                     const SizedBox(height: 20.0),
                   ],

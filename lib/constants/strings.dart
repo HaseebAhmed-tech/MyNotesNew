@@ -1,6 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 //NGO Profile
+import 'dart:io';
+
 String profileName = "Haseeb Ahmed";
 
 //NGO Create Opportunity
@@ -26,3 +28,14 @@ String rating = "5.0";
 //View Status
 String dropDownValue = "Show All";
 String hoursOffered = "";
+
+//NGO User Edit Profile
+
+String hours_offered = "1000";
+String projects_offered = "200";
+String volunteer_engaged = "4.1k";
+String NGOrating = "5.0";
+String poc_name = "Haseeb Ahmed";
+String poc_contact = "03044630011";
+File? profile_image_path;
+File? cover_image_path;

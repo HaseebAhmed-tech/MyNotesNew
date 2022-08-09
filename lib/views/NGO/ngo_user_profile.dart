@@ -2,48 +2,92 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotes/constants/editing_controller.dart';
 import 'package:mynotes/constants/routes.dart';
-import 'package:mynotes/views/NGO/create_opportunity.dart';
+import 'package:mynotes/constants/strings.dart';
 import '../notes_view.dart';
 
-class NgoUserProfile extends StatelessWidget {
-  final String _fullName = "Haseeb Ahmed";
-  final String _status = "NGO Manager";
-  final String _hours_offered = "1000";
-  final String _projects_offered = "200";
-  final String _volunteer_engaged = "4.1k";
-  final String _rating = "5.0";
-  final String _poc_name = "Haseeb Ahmed";
-  final String _poc_contact = "03044630011";
+class NgoUserProfile extends StatefulWidget {
+  const NgoUserProfile({Key? key}) : super(key: key);
+
+  @override
+  State<NgoUserProfile> createState() => _NgoUserProfileState();
+}
+
+class _NgoUserProfileState extends State<NgoUserProfile> {
+  @override
+  void initState() {
+    editUserNameController = TextEditingController();
+    ngoNameController = TextEditingController();
+    editPocNameController = TextEditingController();
+    editPocContactController = TextEditingController();
+    super.initState();
+  }
 
   Widget _buildCoverImage(Size screeSize) {
-    return Container(
+    return SizedBox(
       height: screeSize.height / 3,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/back.jpeg'),
-          fit: BoxFit.cover,
-        ),
-      ),
+      width: double.maxFinite,
+      child: cover_image_path != null
+          ? Image.file(
+              cover_image_path!,
+              fit: BoxFit.cover,
+            )
+          : Image.asset(
+              'assets/images/back.jpeg',
+              fit: BoxFit.cover,
+            ),
     );
+  }
+
+  Widget _buildEditProfile(BuildContext context) {
+    return Container(
+        width: double.maxFinite,
+        alignment: Alignment.topRight,
+        child: IconButton(
+          onPressed: () {
+            setState(() {
+              editUserNameController.text = fullName;
+              ngoNameController.text = myStatus;
+              editPocNameController.text = poc_name;
+              editPocContactController.text = poc_contact;
+            });
+            Navigator.of(context).pushNamed(editNgoProfile);
+          },
+          icon: const Icon(
+            Icons.edit,
+            color: Colors.blue,
+          ),
+        ));
   }
 
   Widget _buildProfileImage() {
     return Center(
-      child: Container(
-        width: 140.0,
-        height: 140.0,
-        decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage("assets/images/profilepic.jpeg"),
-            fit: BoxFit.cover,
+      child: Stack(
+        children: [
+          Container(
+            width: 140.0,
+            height: 140.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(80.0),
+              border: Border.all(
+                color: Colors.white,
+                width: 6.0,
+              ),
+            ),
+            child: ClipOval(
+              child: profile_image_path != null
+                  ? Image.file(
+                      profile_image_path!,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/profilepic.jpeg',
+                      fit: BoxFit.cover,
+                    ),
+            ),
           ),
-          borderRadius: BorderRadius.circular(80.0),
-          border: Border.all(
-            color: Colors.white,
-            width: 6.0,
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -56,7 +100,7 @@ class NgoUserProfile extends StatelessWidget {
       fontWeight: FontWeight.w700,
     );
     return Text(
-      _fullName,
+      fullName,
       style: nameTextStyle,
     );
   }
@@ -70,7 +114,7 @@ class NgoUserProfile extends StatelessWidget {
         borderRadius: BorderRadius.circular(4.0),
       ),
       child: Text(
-        _status,
+        myStatus,
         style: const TextStyle(
           fontFamily: 'Spectral',
           color: Colors.black,
@@ -118,10 +162,10 @@ class NgoUserProfile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          _buildStatItems("Hours", _hours_offered),
-          _buildStatItems("Projects", _projects_offered),
-          _buildStatItems("Engagement", _volunteer_engaged),
-          _buildStatItems("Rating", _rating),
+          _buildStatItems("Hours", hours_offered),
+          _buildStatItems("Projects", projects_offered),
+          _buildStatItems("Engagement", volunteer_engaged),
+          _buildStatItems("Rating", NGOrating),
         ],
       ),
     );
@@ -284,85 +328,65 @@ class NgoUserProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildEditProfile() {
-    return InkWell(
-      // ignore: avoid_print
-      onTap: () => print('exit'),
-      child: Container(
-        height: 50,
-        decoration: const BoxDecoration(
-          // border: Border.all(),
-          color: Color(0xff0095FF),
-        ),
-        child: const Center(
-          child: Text(
-            "EDIT PROFILE",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  const NgoUserProfile({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
-          height: 846.5,
-          width: double.maxFinite,
-          color: Colors.white,
-          child: Stack(
-            children: <Widget>[
-              _buildCoverImage(screenSize),
-              SafeArea(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: screenSize.height / 5.4,
-                    ),
-                    _buildProfileImage(),
-                    _buildFullName(),
-                    _buildStatus(context),
-                    _buildStatContainer(),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildBio(
-                          _poc_name,
-                          "POC",
-                          const Icon(Icons.supervised_user_circle_outlined),
-                        ),
-                        _buildBio(
-                          _poc_contact,
-                          "Contact",
-                          const Icon(Icons.phone_android_outlined),
-                        ),
-                      ],
-                    ),
-                    _buildSeparator(screenSize),
-                    SizedBox(height: screenSize.height / 22),
-                    _buildSearchButton(screenSize, context),
-                    SizedBox(
-                      height: screenSize.height / 36,
-                    ),
-                    _buildButtons(context),
-                    SizedBox(height: screenSize.height / 38),
-                    _buildEditProfile(),
-                  ],
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Container(
+            height: screenSize.height * 1.04,
+            width: double.maxFinite,
+            color: Colors.white,
+            child: Stack(
+              children: <Widget>[
+                _buildCoverImage(screenSize),
+                SafeArea(
+                  child: Column(
+                    children: <Widget>[
+                      _buildEditProfile(context),
+                      SizedBox(
+                        height: screenSize.height / 7.8,
+                      ),
+                      _buildProfileImage(),
+                      _buildFullName(),
+                      _buildStatus(context),
+                      _buildStatContainer(),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildBio(
+                            poc_name,
+                            "POC",
+                            const Icon(Icons.supervised_user_circle_outlined),
+                          ),
+                          _buildBio(
+                            poc_contact,
+                            "Contact",
+                            const Icon(Icons.phone_android_outlined),
+                          ),
+                        ],
+                      ),
+                      _buildSeparator(screenSize),
+                      SizedBox(height: screenSize.height / 22),
+                      _buildSearchButton(screenSize, context),
+                      SizedBox(
+                        height: screenSize.height / 36,
+                      ),
+                      _buildButtons(context),
+                      SizedBox(height: screenSize.height / 38),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

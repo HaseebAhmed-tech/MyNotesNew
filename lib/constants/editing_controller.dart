@@ -8,3 +8,12 @@ late TextEditingController editendcontroller;
 late TextEditingController editdiscriptionController;
 late TextEditingController editStratTimeContoller;
 late TextEditingController editEndTimeController;
+
+late TextEditingController editUserNameController;
+late TextEditingController ngoNameController;
+late TextEditingController editPocNameController;
+late TextEditingController editPocContactController;
+
+late TextEditingController designationController;
+late TextEditingController editBioController;
+late TextEditingController editContactController;

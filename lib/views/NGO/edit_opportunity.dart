@@ -7,6 +7,7 @@ import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/strings.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mynotes/views/NGO/view_status.dart';
 
 class EditOpportunity extends StatefulWidget {
   const EditOpportunity({Key? key}) : super(key: key);
@@ -684,7 +685,7 @@ class _EditOpportunityState extends State<EditOpportunity> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(true);
+                    Navigator.of(context).pop(true);  
                   },
                   child: const Text("Delete"))
             ],
