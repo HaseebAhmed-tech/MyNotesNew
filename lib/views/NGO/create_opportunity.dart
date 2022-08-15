@@ -6,6 +6,7 @@ import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/constants/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mynotes/database/data.dart';
 
 class CreateOpprtunity extends StatefulWidget {
   const CreateOpprtunity({Key? key}) : super(key: key);
@@ -519,6 +520,8 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
             taskDescription = descriptionController.text;
             startTime = _startTimeController.text;
             endTime = _endTimeController.text;
+            String? uid = user?.uid;
+            Data createOpportunityData = Data(uid: uid);
 
             if (startDate.isNotEmpty &&
                 endDate.isNotEmpty &&
@@ -646,6 +649,7 @@ class _CreateOpprtunityState extends State<CreateOpprtunity> {
                     },
                   ];
                   itemsData.add(item[0]);
+                  createOpportunityData.opportunityData(itemsData);
                 }
               }
             } else {

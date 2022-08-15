@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/constants/strings.dart';
+import 'package:mynotes/database/data.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/views/NGO/create_opportunity.dart';
 import 'package:mynotes/views/NGO/create_opportunity_new.dart';
@@ -46,6 +50,9 @@ void main() {
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+  void getTheUserList(String uid) async {
+    await Data(uid: uid).getUserList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +61,41 @@ class Home extends StatelessWidget {
       builder: ((context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            final user = AuthService.firebase().currentUser;
+            final user = FirebaseAuth.instance.currentUser;
+            print(user?.uid);
             if (user != null) {
-              if (user.isEmailVerified) {
-                return const UserProfilePage();
+              if (user.emailVerified) {
+                String? uid = user.uid;
+                getTheUserList(uid);
+
+                print("Important Prints -------------------->");
+                print(userData[0]["username"]);
+                print(userData[0]["stature"]);
+                print(userData[0]["bio"]);
+                if (userData[0]["status"] == "NGO") {
+                  if (userData[0]["username"] != null &&
+                      userData[0]["poc_name"] != null &&
+                      userData[0]["poc_contact"] != null &&
+                      userData[0]["stature"] != null &&
+                      userData[0]["status"] == "NGO") {
+                    fullName = userData[0]["username"];
+                    myStatus = userData[0]["stature"];
+                    poc_name = userData[0]["poc_name"];
+                    poc_contact = userData[0]["poc_contact"];
+                    return const NgoUserProfile();
+                  }
+                } else {
+                  if (userData[0]["username"] != null &&
+                      userData[0]["stature"] != null &&
+                      userData[0]["bio"] != null &&
+                      userData[0]["status"] == "Volunteer") {
+                    print("Inside if======?");
+                    fullName = userData[0]["username"] ?? "";
+                    myStatus = userData[0]["stature"];
+                    bio = userData[0]["bio"];
+                    return const UserProfilePage();
+                  }
+                }
               }
             }
 

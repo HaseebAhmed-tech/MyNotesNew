@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mynotes/constants/strings.dart';
+import 'package:mynotes/database/data.dart';
 import 'package:mynotes/views/login_view.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -85,15 +87,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         UserCredential user = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: email.trim(), password: password.trim());
-        // print(user);
-        // user.user.displayName = username;
-        FirebaseFirestore.instance.collection('users').doc(user.user?.uid).set(
-          {
-            'username': username.trim(),
-            'email': email.trim(),
-            'password': password,
-          },
-        );
+
+        String? uid = user.user?.uid;
+        Data mydata = Data(uid: uid);
+        mydata.createData(username, email, password, valueDropDown);
+
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

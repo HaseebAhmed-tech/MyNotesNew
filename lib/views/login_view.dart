@@ -1,7 +1,10 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/constants/strings.dart';
+import 'package:mynotes/database/data.dart';
 import 'package:mynotes/views/Volunteer_profile/volunteer_user_profile.dart';
 import 'package:mynotes/views/sign_up_view.dart';
 import '../utility/show_error_dialog.dart';
@@ -182,15 +185,57 @@ class _LoginViewState extends State<LoginView> {
                                         email: email,
                                         password: password,
                                       );
-                                      final user =
-                                          FirebaseAuth.instance.currentUser;
+                                      user = FirebaseAuth.instance.currentUser;
                                       if (user?.emailVerified ?? false) {
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.of(context)
-                                            .pushNamedAndRemoveUntil(
-                                          userProfile,
-                                          (route) => false,
-                                        );
+                                        {
+                                          String? uid = user?.uid;
+                                          await Data(uid: uid).getUserList();
+                                          print(userData[0]["username"]);
+                                          print(userData[0]["stature"]);
+                                          print(userData[0]["bio"]);
+                                          print(userData[0]["status"]);
+                                          print(userData[0]["poc_name"]);
+                                          print(userData[0]["poc_contact"]);
+                                          print(userData[0]["status"]);
+
+                                          if (userData[0]["username"] != null &&
+                                              userData[0]["stature"] != null &&
+                                              userData[0]["bio"] != null &&
+                                              userData[0]["status"] ==
+                                                  "Volunteer") {
+                                            print("Inside If <----->");
+                                            fullName =
+                                                userData[0]["username"] ?? "";
+                                            myStatus = userData[0]["stature"];
+                                            bio = userData[0]["bio"];
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                                    userProfile,
+                                                    (route) => false);
+                                          } else if (userData[0]["username"] !=
+                                                  null &&
+                                              userData[0]["poc_name"] != null &&
+                                              userData[0]["poc_contact"] !=
+                                                  null &&
+                                              userData[0]["stature"] != null &&
+                                              userData[0]["status"] == "NGO") {
+                                            fullName = userData[0]["username"];
+                                            myStatus = userData[0]["stature"];
+                                            poc_name = userData[0]["poc_name"];
+                                            poc_contact =
+                                                userData[0]["poc_contact"];
+
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                                    ngoProfileRoute,
+                                                    (route) => false);
+                                          } else {
+                                            print(
+                                                "Didnt take if -------------->");
+                                            fullName =
+                                                userData[0]["username"] ?? "";
+                                          }
+                                        }
                                       } else {
                                         user?.sendEmailVerification();
                                         // ignore: use_build_context_synchronously

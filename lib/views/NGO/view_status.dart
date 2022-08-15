@@ -6,6 +6,7 @@ import 'package:mynotes/constants/editing_controller.dart';
 import 'package:mynotes/constants/ints.dart';
 import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/strings.dart';
+import 'package:mynotes/database/data.dart';
 import '../../constants/routes.dart';
 
 //Stateful Widget
@@ -281,7 +282,7 @@ class _ViewStatusState extends State<ViewStatus> {
     return InkWell(
       // ignore: avoid_print
       onTap: () {
-        Navigator.of(context).pushNamed(
+        Navigator.of(context).popAndPushNamed(
           ngoCreateOpportunity,
         );
       },
@@ -366,7 +367,7 @@ class _ViewStatusState extends State<ViewStatus> {
       visible: isVisible,
       child: InkWell(
         // ignore: avoid_print
-        onTap: () {
+        onTap: () async {
           int i = 0;
           for (i; i < itemsData.length; i++) {
             if (itemsData[i]["task-name"] ==
@@ -531,8 +532,6 @@ class _ViewStatusState extends State<ViewStatus> {
                     //Padding
                     height: screenSize.height / 155,
                   ),
-                  _buildOtherButtons(
-                      "EDIT", Colors.black, Colors.white, screenSize),
                 ],
               ),
             ),

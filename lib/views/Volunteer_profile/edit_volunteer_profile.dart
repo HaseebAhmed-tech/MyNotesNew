@@ -6,6 +6,7 @@ import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/constants/strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import 'package:mynotes/database/data.dart';
 
 class EditVolunteerProfile extends StatefulWidget {
   const EditVolunteerProfile({Key? key}) : super(key: key);
@@ -284,6 +285,8 @@ class _EditVolunteerProfileState extends State<EditVolunteerProfile> {
               poc_contact = editContactController.text;
               poc_name = editBioController.text;
               bio = editBioController.text;
+
+              Data(uid: user?.uid).createEditData(myStatus, bio, fullName);
               if (pickedImage != null && pickedImageCover != null) {
                 profile_image_path = pickedImage;
                 cover_image_path = pickedImageCover;

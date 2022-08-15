@@ -6,6 +6,7 @@ import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/constants/strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import 'package:mynotes/database/data.dart';
 
 class EditNgoProfile extends StatefulWidget {
   const EditNgoProfile({Key? key}) : super(key: key);
@@ -282,6 +283,8 @@ class _EditNgoProfileState extends State<EditNgoProfile> {
               myStatus = ngoNameController.text;
               poc_contact = editPocContactController.text;
               poc_name = editPocNameController.text;
+              Data(uid: user?.uid)
+                  .editDataNgo(fullName, myStatus, poc_name, poc_contact);
               if (pickedImage != null && pickedImageCover != null) {
                 profile_image_path = pickedImage;
                 cover_image_path = pickedImageCover;

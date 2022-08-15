@@ -21,6 +21,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     designationController = TextEditingController();
     editBioController = TextEditingController();
     editContactController = TextEditingController();
+
     super.initState();
   }
 
@@ -75,6 +76,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       fontSize: 28.0,
       fontWeight: FontWeight.w700,
     );
+
     return Text(
       fullName,
       style: nameTextStyle,
@@ -211,63 +213,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Widget _buildButtons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 16.0,
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: InkWell(
-              // ignore: avoid_print
-              onTap: () => print('exit'),
-              child: Container(
-                height: 40.0,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  color: const Color.fromARGB(255, 29, 48, 82),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Exit",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 8.0,
+          horizontal: 16.0,
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: InkWell(
+                // ignore: avoid_print
+                onTap: () => print('exit'),
+                child: Container(
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    color: const Color.fromARGB(255, 29, 48, 82),
                   ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 10.0,
-          ),
-          Expanded(
-            child: InkWell(
-              // ignore: avoid_print
-              onTap: () async {
-                final shouldLogout = await showLogoutDialog(context);
-                if (shouldLogout) {
-                  await FirebaseAuth.instance.signOut();
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    loginRoute,
-                    (_) => false,
-                  );
-                }
-              },
-              child: Container(
-                height: 40.0,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                ),
-                child: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
+                  child: const Center(
                     child: Text(
-                      "LOG OUT!",
+                      "Exit",
                       style: TextStyle(
+                        color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -275,8 +243,44 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: InkWell(
+                // ignore: avoid_print
+                onTap: () async {
+                  final shouldLogout = await showLogoutDialog(context);
+                  if (shouldLogout) {
+                    await FirebaseAuth.instance.signOut();
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (_) => false,
+                    );
+                  }
+                },
+                child: Container(
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        "LOG OUT!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

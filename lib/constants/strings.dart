@@ -3,6 +3,9 @@
 //NGO Profile
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mynotes/constants/lists.dart';
+
 String profileName = "Haseeb Ahmed";
 
 //NGO Create Opportunity
@@ -18,6 +21,7 @@ String endTime = "";
 
 //User SignUp
 String fullName = "Haseeb Ahmed";
+
 String myStatus = "NGO Manager";
 String bio =
     "\"Patricia's friend who was here hardly had any issues at all, but she wasn't telling the truth. Yesterday, before she left to go home,\"";
@@ -39,3 +43,5 @@ String poc_name = "Haseeb Ahmed";
 String poc_contact = "03044630011";
 File? profile_image_path;
 File? cover_image_path;
+
+User? user;

@@ -3,8 +3,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/editing_controller.dart';
+import 'package:mynotes/constants/lists.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/constants/strings.dart';
+import 'package:mynotes/database/data.dart';
 import '../notes_view.dart';
 
 class NgoUserProfile extends StatefulWidget {
@@ -255,66 +257,43 @@ class _NgoUserProfileState extends State<NgoUserProfile> {
   }
 
   Widget _buildButtons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 16.0,
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: InkWell(
-              // ignore: avoid_print
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  viewNgoStatus,
-                );
-              },
-              child: Container(
-                height: 40.0,
-                decoration: const BoxDecoration(
-                  // border: Border.all(),
-                  color: Color(0xff0095FF),
-                ),
-                child: const Center(
-                  child: Text(
-                    "STATUS",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 8.0,
+          horizontal: 16.0,
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: InkWell(
+                // ignore: avoid_print
+                onTap: () async {
+                  String? uid = user?.uid;
+                  await Data(uid: uid).getOpportunityData();
+                  // print("Opportunity ------------->" + userData[0]["itemsData"]);
+                  if (userData[0]["itemsData"] != null) {
+                    itemsData = userData[0]["itemsData"];
+                    Navigator.of(context).pushNamed(
+                      viewNgoStatus,
+                    );
+                  } else {
+                    Navigator.of(context).pushNamed(
+                      viewNgoStatus,
+                    );
+                  }
+                },
+                child: Container(
+                  height: 40.0,
+                  decoration: const BoxDecoration(
+                    // border: Border.all(),
+                    color: Color(0xff0095FF),
                   ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 10.0,
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () async {
-                final shouldLogout = await showLogoutDialog(context);
-                if (shouldLogout) {
-                  await FirebaseAuth.instance.signOut();
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    loginRoute,
-                    (_) => false,
-                  );
-                }
-              },
-              child: Container(
-                height: 40.0,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                ),
-                child: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
+                  child: const Center(
                     child: Text(
-                      "LOG OUT!",
+                      "STATUS",
                       style: TextStyle(
+                        color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -322,8 +301,43 @@ class _NgoUserProfileState extends State<NgoUserProfile> {
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () async {
+                  final shouldLogout = await showLogoutDialog(context);
+                  if (shouldLogout) {
+                    await FirebaseAuth.instance.signOut();
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (_) => false,
+                    );
+                  }
+                },
+                child: Container(
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        "LOG OUT!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
